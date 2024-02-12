@@ -35,15 +35,20 @@ dwr_df <- dwr %>%
   filter(chemical == c("Nitrate as N", 
                        "Lead", 
                        "Arsenic", 
-                       "pH", 
+                       "Alkalinity as CaCO3", 
                        "Mercury", 
                        "bicarbonate HCO3"))
 
 # join dwr and pfos data 
 
-water_quality <- full_join(pfos_df, dwr_df, by = NULL)
+water_quality <- full_join(pfos_df, dwr_df, by = NULL) %>%
+  mutate(date = lubridate::mdy(date)) 
 
 
+
+
+
+####################################### CHELSEA ZONE STARTS
 
 enviro <- read_csv(here('data', 'SB353_tract.csv'))
 enviro_all <- read_csv(here('data', 'SB353_tract_all.csv'))
@@ -86,3 +91,13 @@ ggplot(data = counties_depth) +
 theme_minimal()
 
 ################################CHELSEA ZONE ENDS
+
+
+
+
+
+
+
+
+
+

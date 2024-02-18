@@ -1,24 +1,32 @@
 
+# convert depth to sf 
 
-# combine water quality and county data 
+depth_df <- depth %>%
+  janitor::clean_names() %>%
+  select(measurement_date, depth_to_water, gw_elevation, longitude, latitude)
+
+depth_sf <- st_as_sf(x = depth_df, 
+                     coords = c('longitude', 'latitude'), 
+                     crs = 4326)
+
+# convert water quality to sf 
 
 water_quality_sf <- st_as_sf(x = water_quality, 
                              coords = c('longitude', 'latitude'), 
                              crs = 4326)
-st_crs(ca_counties)
 
 water_quality_sf <- st_transform(water_quality_sf, 3857)
 
+# combine water quality and county data 
+
+
 county_water <- st_join(ca_counties, water_quality_sf)
 water_county <- st_join(water_quality_sf, ca_counties)
-
-
 
 # give each chemical its sf 
 
 pfoa_sf <- county_water %>%
   filter(chemical == "Perfluorooctanoic acid (PFOA)")
-
 
 pfos_sf <- county_water %>%
   filter(chemical == "Perfluorooctane sulfonate (PFOS)")

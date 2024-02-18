@@ -15,6 +15,24 @@ ui <- fluidPage(
     
     tabPanel( ### start tab 2
       title = 'Groundwater Levels',
+      sidebarLayout(
+        sidebarPanel("Groundwater Levels",
+        
+                # Copy the line below to make a select box 
+                 selectInput("select", label = h3("Select year"), 
+                        choices = list("2000" = 1, "2001" = 2, "2002" = 3), 
+                        selected = 1),
+        
+              hr(),
+              fluidRow(column(3, verbatimTextOutput("value"))) 
+                 
+                ), #end sidebar panel
+    
+        mainPanel("map goes here")
+      ) # end sidebar layout
+      
+      
+      
     ), ### end tab 2
     
     tabPanel( ### start tab 3

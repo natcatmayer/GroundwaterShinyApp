@@ -43,7 +43,7 @@ map <- tm_shape(ca_counties) +
 
 view(map)
 
-#### California Map
+### CA Map
 counties_depth <- st_join(ca_counties, depth_mod)
 
 ggplot(data = counties_depth) +

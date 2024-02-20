@@ -172,17 +172,7 @@ ui <- fluidPage(
 ) # end Fluidpage
 
 ### Create the server function:
-server <- function(input, output) {
-  chemical_select <- reactive({
-    chemical_select_df <- county_water %>%
-      filter(chemical == input$chemical)
-  }) # end chemical reactive 
-  
-  output$chemical_plot <- renderPlot({
-    ggplot(data = chemical_select()) + 
-      geom_point(aes(x = date, y = measurement))
-  })
-}
+server <- function(input, output) {}
 
 ### Combine them into an app:
 shinyApp(ui = ui, server = server)

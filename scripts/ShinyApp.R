@@ -43,11 +43,18 @@ ui <- fluidPage(
       fluidRow( # start fluid row 2.2
         column(
           width = 3,
-          h3('Select county'),
+
           
           selectInput("county", label = h3("select county"),
                       choices = list("ventura" = 1, "santa barbara" = 2, "los angeles" = 3),
-                      selected = 1)),
+                      selected = 1),
+          
+          selectInput("year", label = h3("select year"),
+                      choices = list("2000" = 1, "2001" = 2, "2002" = 3),
+                      selected = 1)
+          
+          
+          ), # end column
             
         column(
           width = 9,
@@ -98,14 +105,14 @@ ui <- fluidPage(
           radioButtons(
             inputId = 'chemical',
             label = 'chemical',
-            choices = c(4, 6, 8), 
+            choices = c(4, 6, 8))
           
-        ),
+        ), # end column
+        
         column(
           width = 9,
           h3('Graph here'),
-          #plotOutput('insert_graph'))
-        ))
+          plotOutput('insert_graph'))
       ) ### end fluidRow 3.2
       
       

@@ -2,69 +2,52 @@
 library(tidyverse)
 library(here)
 library(sf)
-library(terra)
-library(tidyterra)
-library(tmap)
 
 # load water data 
 
-pfos <- read_tsv(here('data', 'water_quality', 'statewide_pfos_data.txt'))
-dwr <- read_tsv(here('data', 'water_quality', 'dwr_water_quality_data.txt'))
-groundwater_depth <- read_csv(here('data', 'groundwater_depth.csv'))
+water_quality <- read_csv(here('data', 'water_quality.csv'))
+depth_df <- read_csv(here('data', 'groundwater_depth.csv'))
+ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
 
-# clean groundwater data 
-depth_df <- groundwater_depth %>%
-  filter(year >= 2022) %>%
-  distinct(.keep_all = TRUE) %>%
-  drop_na()
+ca_counties_sf <- ca_counties_raw_sf %>% 
+  janitor::clean_names() %>%
+  mutate(land_km2 = aland / 1e6) %>%
+  select(county = name, land_km2)
 
+  
+# convert water quality to sf 
+  
+water_quality_sf <- st_as_sf(x = water_quality, 
+                               coords = c('longitude', 'latitude'), 
+                               crs = 4326)
 
-depth_df %>% write_csv(here('data', 'groundwater_depth.csv'))
+water_quality_sf <- st_transform(water_quality_sf, 3857)
 
+# combine water quality and county data 
 
-# clean pfos data 
-pfos_df <- pfos %>%
-  select(chemical = GM_CHEMICAL_NAME,
-         date = GM_SAMP_COLLECTION_DATE,
-         latitude = GM_LATITUDE, 
-         longitude = GM_LONGITUDE, 
-         measurement = GM_RESULT, 
-         units = GM_CHEMICAL_UNITS) %>%
-  filter(chemical ==  c("Perfluorooctanoic acid (PFOA)", "Perfluorooctane sulfonate (PFOS)"))
+county_water <- st_join(ca_counties_sf, water_quality_sf)
+water_county <- st_join(water_quality_sf, ca_counties_sf)
 
-
-# clean dwr data 
-dwr_df <- dwr %>%
-  select(chemical = GM_CHEMICAL_NAME, 
-         date = GM_SAMP_COLLECTION_DATE,
-         measurement = GM_RESULT,
-         units = GM_CHEMICAL_UNITS, 
-         latitude = GM_LATITUDE, 
-         longitude = GM_LONGITUDE) %>%
-  filter(chemical == c("Nitrate as N", 
-                       "Lead", 
-                       "Arsenic", 
-                       "Alkalinity as CaCO3", 
-                       "Mercury", 
-                       "bicarbonate HCO3"))
-
-# join dwr and pfos data 
-
-water_quality <- full_join(pfos_df, dwr_df, by = NULL) %>%
-  mutate(date = lubridate::mdy(date)) 
-
-water_quality %>% write_csv(here('data', 'water_quality.csv'))
+water_county <- water_county %>%
+  separate(date, c("year", "month", "day"))
 
 
+# convert depth to sf 
 
 
+depth_sf <- st_as_sf(x = depth_df, 
+                     coords = c('longitude', 'latitude'), 
+                     crs = 4326)
 
+depth_sf <- st_transform(depth_sf, 3857)
 
+# combine groundwater depth and ca counties 
 
+gw_county <- st_join(depth_sf, ca_counties_sf)
+county_gw <- st_join(ca_counties_sf, depth_sf)
 
-
-
-
-
-
+county_gw_avg <- county_gw %>%
+  drop_na() %>%
+  group_by(county) %>%
+  summarise(average_depth = mean(depth_to_water))
 

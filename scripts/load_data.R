@@ -51,3 +51,5 @@ county_gw_avg <- county_gw %>%
   group_by(county) %>%
   summarise(average_depth = mean(depth_to_water))
 
+save(county_gw_avg, file = "data/county_gw_avg.RData")
+

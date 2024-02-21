@@ -2,17 +2,13 @@
 ######### data wrangling ##########################
 # convert depth to sf 
 
-depth_df <- depth %>%
-  janitor::clean_names() %>%
-  select(measurement_date, depth_to_water, longitude, latitude)
 
 depth_sf <- st_as_sf(x = depth_df, 
                      coords = c('longitude', 'latitude'), 
                      crs = 4326)
 
 depth_sf <- depth_sf %>%
-  mutate(date = lubridate::mdy(measurement_date)) %>%
-  separate(date, c("year", "month", "day"))
+  
 
 
 # convert water quality to sf 

@@ -1,0 +1,22 @@
+---
+title: "Chelsea's Quarto"
+author: "Chelsea Sanford"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+library(here)
+library(sf)
+library(terra)
+library(tidyterra)
+library(tmap)
+
+# load water data 
+dwr <- read_tsv(here('data', 'water_quality', 'dwr_water_quality_data.txt'))
+groundwater_depth <- read_csv(here('data', 'groundwater_depth.csv'))
+
+socioeco <- read.csv(here('data/SB353_tract_all.csv'))
+```
+

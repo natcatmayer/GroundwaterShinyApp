@@ -12,11 +12,63 @@ library(sf)
 library(terra)
 library(tidyterra)
 library(tmap)
+library(dplyr)
+```
 
-# load water data 
-dwr <- read_tsv(here('data', 'water_quality', 'dwr_water_quality_data.txt'))
-groundwater_depth <- read_csv(here('data', 'groundwater_depth.csv'))
 
-socioeco <- read.csv(here('data/SB353_tract_all.csv'))
+### Load in the Data
+```{r}
+dwr <- read_csv(here('data/water_quality.csv'))
+groundwater_depth <- read_csv(here('data/groundwater_depth.csv'))
+socioeco <- read.csv(here('data/socioeco_data.csv'))
+ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
+```
+
+
+### Create CA County Map and Overlay Groundwater Data
+
+1. Read in the data and clean
+```{r}
+ca_counties_sf <- ca_counties_raw_sf %>% 
+  janitor::clean_names() %>%
+  mutate(land_km2 = aland / 1e6) %>%
+  select(county = name, land_km2)
+
+#ca_counties_sf %>% st_crs() ###3857
+```
+
+2. Change groundwater data to simple feature and assign 3857 CRS
+```{r}
+groundwater_sf <- groundwater_depth %>% 
+  drop_na(longitude, latitude) %>% 
+  st_as_sf(coords = c("latitude", "longitude")) %>% 
+  filter(year == '2023')
+
+#groundwater_sf %>% st_crs() ### 3857
+
+st_crs(groundwater_sf) <- 3857
+```
+
+3. Create a tmap well locations overlaying county data.
+```{r}
+tmap_mode(mode = "view")
+
+tm_shape(ca_counties_sf) +
+  tm_fill() +
+  tm_shape(groundwater_sf) +
+  tm_dots()
+```
+
+```{r}
+groundwater_sf_depth <- groundwater_depth %>% 
+  drop_na(longitude, latitude) %>% 
+  st_as_sf(coords = c("latitude", "longitude")) %>% 
+  filter(year == "2023")
+
+
+ggplot() +
+  geom_sf(data = ca_counties_sf) +
+  geom_sf(data = groundwater_sf, aes(color = depth_to_water)) +
+  theme_void()
 ```
 

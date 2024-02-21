@@ -8,9 +8,18 @@ library(tmap)
 
 # load water data 
 
-pfos <- read_tsv(here('data', 'statewide_pfos_data.txt'))
-dwr <- read_tsv(here('data', 'dwr_water_quality_data.txt'))
-depth <- read_tsv(here('data', 'depth_to_water_and_groundwater_elevation_data.txt'))
+pfos <- read_tsv(here('data', 'water_quality', 'statewide_pfos_data.txt'))
+dwr <- read_tsv(here('data', 'water_quality', 'dwr_water_quality_data.txt'))
+groundwater_depth <- read_csv(here('data', 'groundwater_depth.csv'))
+
+# clean groundwater data 
+depth_df <- groundwater_depth %>%
+  filter(year >= 2022) %>%
+  distinct(.keep_all = TRUE) %>%
+  drop_na()
+
+
+depth_df %>% write_csv(here('data', 'groundwater_depth.csv'))
 
 
 # clean pfos data 
@@ -44,7 +53,7 @@ dwr_df <- dwr %>%
 water_quality <- full_join(pfos_df, dwr_df, by = NULL) %>%
   mutate(date = lubridate::mdy(date)) 
 
-
+water_quality %>% write_csv(here('data', 'water_quality.csv'))
 
 
 

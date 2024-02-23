@@ -22,32 +22,55 @@ dwr <- read_csv(here('data/water_quality.csv'))
 groundwater_depth <- read_csv(here('data/groundwater_depth.csv'))
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
 
-socioecodata <- read.csv(here('data/cal_enviro_data.csv'))
-demodata <- read.csv(here('data/demodata.csv')) 
+socioecodata <- read.csv(here('data/socioeco.csv'))
+demodata <- read_csv(here('data/demodata.csv')) 
 ```
 
-# Cut, clean, and rewrite data
+### Cut, clean, and rewrite data
 ```{r}
-### demographic data
-demodata <- read.csv(here('data/demodata.csv')) 
+# ### demographic data
+# demodata <- read.csv(here('data/demodata.csv')) 
+# 
+# first_row <- demodata[1, ] 
+# colnames(demodata) <- as.character(first_row)
+# 
+# demodatamod <- demodata %>% 
+#   janitor::clean_names() %>% 
+#   filter(row_number() > 1) %>% 
+#   select(-census_tract, -children_10_years_percent, -pop_10_64_years_percent, -elderly_64_years_percent)
+# 
+# write_csv(demodatamod, here('data/demodata.csv'))
+# 
+# ### Socioeconomic data
+# socioecodata <- read.csv(here('data/cal_enviro_data.csv')) %>% 
+#   janitor::clean_names() %>% 
+#  select(california_county, longitude, latitude,ces_4_0_score, ces_4_0_percentile, ces_4_0_percentile_range, # drinking_water, drinking_water_pctl, lead, lead_pctl, poverty, poverty_pctl)
+# 
+# write_csv(socioecodata, here('data/socioeco.csv'))
 
-first_row <- demodata[1, ] 
-colnames(demodata) <- as.character(first_row)
-
-demodatamod <- demodata %>% 
-  janitor::clean_names() %>% 
-  filter(row_number() > 1) %>% 
-  select(-census_tract, -children_10_years_percent, -pop_10_64_years_percent, -elderly_64_years_percent)
-
-write_csv(demodatamod, here('data/demodata.csv'))
-
-### Socioeconomic data
-socioecodata <- read.csv(here('data/cal_enviro_data.csv')) %>% 
-  janitor::clean_names() %>% 
-  select(california_county, longitude, latitude,ces_4_0_score, ces_4_0_percentile, ces_4_0_percentile_range, drinking_water, drinking_water_pctl, lead, lead_pctl, poverty, poverty_pctl)
-
-write_csv(socioecodata, here('data/socioeco.csv'))
+## group_by() and select() are in both dplyr and terra
 ```
+
+#########################################################################################################################
+
+```{r}
+ca_county_pctl_1 <- demodata %>% 
+  drop_na() %>%   
+  dplyr::group_by(california_county) %>% 
+  summarize(avg_pctl = mean(ces_4_0_percentile, na.rm = TRUE),
+            avg_score = mean(ces_4_0_score,na.rm = TRUE))
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -73,16 +96,6 @@ groundwater_sf <- groundwater_depth %>%
 #groundwater_sf %>% st_crs() ### 3857
 
 st_crs(groundwater_sf) <- 3857
-```
-
-3. Create a tmap well locations overlaying county data.
-```{r}
-tmap_mode(mode = "view")
-
-tm_shape(ca_counties_sf) +
-  tm_fill() +
-  tm_shape(groundwater_sf) +
-  tm_dots()
 ```
 
 ```{r}

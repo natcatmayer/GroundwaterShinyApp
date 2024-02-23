@@ -20,9 +20,35 @@ library(dplyr)
 ```{r}
 dwr <- read_csv(here('data/water_quality.csv'))
 groundwater_depth <- read_csv(here('data/groundwater_depth.csv'))
-socioeco <- read.csv(here('data/socioeco_data.csv'))
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
+
+socioecodata <- read.csv(here('data/cal_enviro_data.csv'))
+demodata <- read.csv(here('data/demodata.csv')) 
 ```
+
+# Cut, clean, and rewrite data
+```{r}
+### demographic data
+demodata <- read.csv(here('data/demodata.csv')) 
+
+first_row <- demodata[1, ] 
+colnames(demodata) <- as.character(first_row)
+
+demodatamod <- demodata %>% 
+  janitor::clean_names() %>% 
+  filter(row_number() > 1) %>% 
+  select(-census_tract, -children_10_years_percent, -pop_10_64_years_percent, -elderly_64_years_percent)
+
+write_csv(demodatamod, here('data/demodata.csv'))
+
+### Socioeconomic data
+socioecodata <- read.csv(here('data/cal_enviro_data.csv')) %>% 
+  janitor::clean_names() %>% 
+  select(california_county, longitude, latitude,ces_4_0_score, ces_4_0_percentile, ces_4_0_percentile_range, drinking_water, drinking_water_pctl, lead, lead_pctl, poverty, poverty_pctl)
+
+write_csv(socioecodata, here('data/socioeco.csv'))
+```
+
 
 
 ### Create CA County Map and Overlay Groundwater Data

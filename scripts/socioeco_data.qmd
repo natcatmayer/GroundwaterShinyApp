@@ -20,6 +20,7 @@ library(dplyr)
 dwr <- read_csv(here('data/water_quality.csv'))
 groundwater_depth <- read_csv(here('data/groundwater_depth.csv'))
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
+water_quality <- read_csv(here('data', 'water_quality.csv'))
 
 socioecodata <- read.csv(here('data/socioeco.csv'))
 demodata <- read_csv(here('data/demodata.csv')) 
@@ -75,37 +76,249 @@ ca_counties_sf <- ca_counties_raw_sf %>%
 
 
 ### join the two together
-county_ces_join <- merge(ca_county_ces, ca_counties_sf, by="county")
+county_ces_join <- merge(ca_county_ces, ca_counties_sf, by="county") %>% 
+  select(-land_km2, -avg_pctl)
 
 ### ggplot
-ces_plot <- ggplot() +
-  geoms
+ces_plot <- ggplot(data = county_ces_join) +
+  geom_sf(aes(fill = avg_score, geometry = geometry), color = "white", size = 0.1) +
+  scale_fill_gradientn(colors = c("lightgray","orange","red")) +
+  theme_void() +
+  labs(fill = "Average CES Score")
 
+plot(ces_plot)
 ```
 
-
-2.  Change CES data to simple feature and assign 3857 CRS
-
+### Groundwater Quality vs CES Score
 ```{r}
-groundwater_sf <- groundwater_depth %>% 
-  drop_na(longitude, latitude) %>% 
-  st_as_sf(coords = c("latitude", "longitude")) %>% 
-  filter(year == '2023')
 
-#groundwater_sf %>% st_crs() ### 3857
 
-st_crs(groundwater_sf) <- 3857
+# convert water quality to sf 
+water_quality_sf <- st_as_sf(x = water_quality, 
+                             coords = c('longitude', 'latitude'), 
+                             crs = 4326)
+
+water_quality_sf <- st_transform(water_quality_sf, 3857)
+
+
+# combine water quality and county data 
+county_water <- st_join(ca_counties_sf, water_quality_sf)
+water_county <- st_join(water_quality_sf, ca_counties_sf)
+
+water_county <- water_county %>%
+  separate(date, c("year", "month", "day"))
+
+county_water <- county_water %>%
+  separate(date, c("year", "month", "day"))
+
+
+
+
+
 ```
 
+
+
+
+
+
+
+######################################### ShinyApp ################################################
+
+### Attach necessary packages
+``` {r}
+library(shiny)
+library(tidyverse)
+library(bslib)
+```
+
+### Create the user interface:
+``` {r}
+ui <- fluidPage(
+  theme = bs_theme(bootswatch = 'minty'),
+  
+  titlePanel('California Groundwater'),
+  tabsetPanel(
+    
+    tabPanel( ### start tab 1
+      title = 'Home',
+      p('Photo, TOC, purpose, baclground, etc. ')
+         ), ### end tab 1
+    
+    tabPanel( ### start tab 2
+      title = 'Groundwater Levels',
+      
+      fluidRow( # start fluid row 2.1
+        column(width = 3,
+               selectInput("select", label = h3("Select year"),
+                                                     choices = list("2000" = 1, "2001" = 2, "2002" = 3),
+                                                     selected = 1),
+               hr(),
+               fluidRow(column(3, verbatimTextOutput("value"))
+               
+               
+               )
+        ), ### end column
+        column(width = 9,
+               h3('Map Here'),
+               #plotOutput('insert_map')
+        )
+      ), ### end fluidRow 2.1
+      
+      hr(), ### horizontal rule so the row breaks are easier to see
+      p('talk about how they should look at the map'),
+      hr(),
+      
+      fluidRow( # start fluid row 2.2
+        column(
+          width = 3,
+
+          
+          selectInput("county", label = h3("select county"),
+                      choices = list("ventura" = 1, "santa barbara" = 2, "los angeles" = 3),
+                      selected = 1),
+          
+          selectInput("year", label = h3("select year"),
+                      choices = list("2000" = 1, "2001" = 2, "2002" = 3),
+                      selected = 1)
+          
+          
+          ), # end column
+            
+        column(
+          width = 9,
+          h3('Graph here'),
+          plotOutput('insert_graph'))
+        
+      ) ### end fluidRow 2.2
+    
+      
+    ), ### end tab 2
+    
+    tabPanel( ### start tab 3
+      title = 'Groundwater Quality',
+
+      
+      fluidRow( # start fluid row 3.1
+        column(width = 3,
+               h3('select chemical'),
+               
+               radioButtons(
+                 inputId = 'chemical',
+                 label = 'chemical',
+                 choices = c('lead', 'etc.')),
+               
+               
+        ), ### end column
+        
+        column(width = 9,
+               h3('Map Here'),
+               plotOutput('insert_map')
+        ) ### end column
+        
+      ), ### end fluidRow 3.1
+      
+      hr(), ### horizontal rule so the row breaks are easier to see
+      p('talk about how they should look at the map'),
+      hr(),
+      
+      fluidRow( # start fluid row 3.2
+        column(
+          width = 3,
+          
+          selectInput("county", label = h3("Select year"),
+                      choices = list("ventura" = 1, "santa barbara" = 2, "los angeles" = 3),
+                      selected = 1),
+          
+          
+          radioButtons(
+            inputId = 'chemical',
+            label = 'chemical',
+            choices = c(4, 6, 8))
+          
+        ), # end column
+        
+        column(
+          width = 9,
+          h3('Graph here'),
+          plotOutput('insert_graph'))
+      ) ### end fluidRow 3.2
+      
+      
+    
+      
+    ), ### end tab 3  
+    
+    tabPanel( ### start tab 4
+      title = 'Environmental Justice',
+  
+      fluidRow( # start fluid row 4.1
+      column(width = 3,
+                    h3('select demographic'),
+                    radioButtons(
+                      inputId = 'demographic',
+                      label = 'demographic category',
+                      choices = c(4, 6, 8)
+                    )
+        ), ### end column
+        column(width = 9,
+                    h3('Map Here'),
+                    #plotOutput('insert_map')
+        )
+      ), ### end fluidRow 4.1
+      
+      hr(), ### horizontal rule so the row breaks are easier to see
+      p('talk about how they should look at the map'),
+      hr(),
+      
+      fluidRow( # start fluid row 4.2
+        column(
+          width = 3,
+          h3('Select other variable'),
+          radioButtons(
+            inputId = 'demographic',
+            label = 'demographic category',
+            choices = c(4, 6, 8)
+          )
+        ),
+        column(
+          width = 9,
+          h3('Graph here'),
+          #plotOutput('insert_graph'))
+        )
+      ) ### end fluidRow 4.2
+      
+    ), ### end tab 4 
+    
+    tabPanel( ### start tab 5
+      title = 'Groundwater Dependent Ecosystems',
+      
+      p(' If we have time :-) ')
+      
+    ) ### end tab 5  
+  ) ### end tabsetPanel
+  
+) # end Fluidpage
+
+```
+
+### Create the server function:
+``` {r}
+server <- function(input, output) {}
+``` 
+
+
+### Combine them into an app:
 ```{r}
-groundwater_sf_depth <- groundwater_depth %>% 
-  drop_na(longitude, latitude) %>% 
-  st_as_sf(coords = c("latitude", "longitude")) %>% 
-  filter(year == "2023")
-
-
-ggplot() +
-  geom_sf(data = ca_counties_sf) +
-  geom_sf(data = groundwater_sf, aes(color = depth_to_water)) +
-  theme_void()
+shinyApp(ui = ui, server = server)
 ```
+  
+### Home Page 
+
+### Groundwater depth levels 
+
+### Chemicals 
+
+### Socioeconomic 
+
+### groundwater dependent ecosystems ? 

@@ -17,10 +17,9 @@ library(dplyr)
 ### Load in the Data
 
 ```{r}
-dwr <- read_csv(here('data/water_quality.csv'))
 groundwater_depth <- read_csv(here('data/groundwater_depth.csv'))
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
-water_quality <- read_csv(here('data', 'water_quality.csv'))
+water_quality <- read_csv(here('data/water_quality.csv'))
 
 socioecodata <- read.csv(here('data/socioeco.csv'))
 demodata <- read_csv(here('data/demodata.csv')) 
@@ -52,7 +51,7 @@ demodata <- read_csv(here('data/demodata.csv'))
 ## group_by() and select() are in both dplyr and terra
 ```
 
-######################################################################################################################### 
+#################################################### CES + County Data ####################################################
 
 ### Edit the CES data
 ```{r}
@@ -89,10 +88,11 @@ ces_plot <- ggplot(data = county_ces_join) +
 plot(ces_plot)
 ```
 
+
+############################################ Water Quality + CES ##############################################
+
 ### Groundwater Quality vs CES Score
 ```{r}
-
-
 # convert water quality to sf 
 water_quality_sf <- st_as_sf(x = water_quality, 
                              coords = c('longitude', 'latitude'), 
@@ -103,18 +103,25 @@ water_quality_sf <- st_transform(water_quality_sf, 3857)
 
 # combine water quality and county data 
 county_water <- st_join(ca_counties_sf, water_quality_sf)
-water_county <- st_join(water_quality_sf, ca_counties_sf)
 
-water_county <- water_county %>%
-  separate(date, c("year", "month", "day"))
+county_water_year <- county_water %>%
+  drop_na() %>% 
+  separate(date, c("year", "month", "day")) %>% 
+  select(-month, -day, -land_km2) 
 
-county_water <- county_water %>%
-  separate(date, c("year", "month", "day"))
+county_water_pivot <- county_water_year %>% 
+  group_by(year, county, chemical) %>%
+  summarize(mean_measurement = mean(measurement, na.rm = TRUE)) %>%
+  pivot_wider(names_from = chemical, values_from = mean_measurement) %>% 
+  janitor::clean_names()
 
-
-
-
-
+# co3_plot <- ggplot(data = county_water_pivot) +
+#   geom_sf(aes(fill = alkalinity_as_ca_co3, geometry = geometry), color = "white", size = 0.1) +
+#   scale_fill_gradientn(colors = c("lightgray","orange","red")) +
+#   theme_void() +
+#   labs(fill = "Average CO3")
+# 
+# co3_plot
 ```
 
 

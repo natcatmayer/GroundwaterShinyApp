@@ -11,12 +11,11 @@ library(here)
 library(sf)
 library(terra)
 library(tidyterra)
-library(tmap)
 library(dplyr)
 ```
 
-
 ### Load in the Data
+
 ```{r}
 dwr <- read_csv(here('data/water_quality.csv'))
 groundwater_depth <- read_csv(here('data/groundwater_depth.csv'))
@@ -27,6 +26,7 @@ demodata <- read_csv(here('data/demodata.csv'))
 ```
 
 ### Cut, clean, and rewrite data
+
 ```{r}
 # ### demographic data
 # demodata <- read.csv(here('data/demodata.csv')) 
@@ -51,42 +51,41 @@ demodata <- read_csv(here('data/demodata.csv'))
 ## group_by() and select() are in both dplyr and terra
 ```
 
-#########################################################################################################################
+######################################################################################################################### 
 
+### Edit the CES data
 ```{r}
-ca_county_pctl_1 <- demodata %>% 
+ca_county_ces <- demodata %>% 
   drop_na() %>%   
   dplyr::group_by(california_county) %>% 
   summarize(avg_pctl = mean(ces_4_0_percentile, na.rm = TRUE),
-            avg_score = mean(ces_4_0_score,na.rm = TRUE))
+            avg_score = mean(ces_4_0_score,na.rm = TRUE)) 
 
+colnames(ca_county_ces) <- c('county', 'avg_pctl', 'avg_score')
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-### Create CA County Map and Overlay Groundwater Data
-
-1. Read in the data and clean
+### Create CA County Map and Overlay CES Score Data
 ```{r}
+### counties data
 ca_counties_sf <- ca_counties_raw_sf %>% 
   janitor::clean_names() %>%
   mutate(land_km2 = aland / 1e6) %>%
   select(county = name, land_km2)
-
 #ca_counties_sf %>% st_crs() ###3857
+
+
+### join the two together
+county_ces_join <- merge(ca_county_ces, ca_counties_sf, by="county")
+
+### ggplot
+ces_plot <- ggplot() +
+  geoms
+
 ```
 
-2. Change groundwater data to simple feature and assign 3857 CRS
+
+2.  Change CES data to simple feature and assign 3857 CRS
+
 ```{r}
 groundwater_sf <- groundwater_depth %>% 
   drop_na(longitude, latitude) %>% 
@@ -110,4 +109,3 @@ ggplot() +
   geom_sf(data = groundwater_sf, aes(color = depth_to_water)) +
   theme_void()
 ```
-

@@ -73,6 +73,7 @@ ui <- fluidPage(
 ### Create the server function:
 server <- function(input, output) {
   thematic::thematic_shiny() #### ensures that the ggplot2 automatically matches the app theme
+
 }
 
 ### Combine them into an app:

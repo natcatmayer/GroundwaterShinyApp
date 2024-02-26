@@ -1,4 +1,9 @@
 
+# load libraries
+library(tidyverse)
+library(here)
+library(sf)
+
 # load water data 
 
 water_quality <- read_csv(here('data', 'water_quality.csv'))
@@ -201,10 +206,9 @@ gw_select_1 <- reactive({
 
 output$gw_plot_2 <- renderPlot({
   ggplot(data = gw_select_1()) + 
-    geom_col(aes(x = year, 
-                  y = average_depth)) + 
+    geom_col(aes(x = year, y = average_depth)) + 
     labs(x = "Year", 
-         y = "Average Groundwater Depth") + 
+         y = "Average Groundwater Depth")
     theme_minimal()
 })
   
@@ -223,7 +227,7 @@ county_chemical_select_1 <- reactive({
 output$chemical_map <- renderPlot({
   ggplot(data = county_chemical_select_1()) + 
     geom_sf(aes(fill = avg_measure), color = "white", size = 0.1) + 
-    scale_fill_gradientn(colors = c("lightgray", "lightblue", "blue", "navy", "black")) + 
+    scale_fill_continuous(low = "lightblue", high = "navy", guide = "colorbar", na.value = "lightgray") + 
     theme_minimal() + 
     labs(fill = 'Chemical Concentration in Groundwater')
 })
@@ -242,7 +246,8 @@ county_chemical_select <- reactive({
 
 output$chemical_plot <- renderPlot({
   ggplot(data = county_chemical_select()) + 
-    geom_point(aes(x = year, y = avg_measure)) 
+    geom_col(aes(x = year, y = avg_measure), color = "navy") + 
+    theme_minimal()
 })
 
 ### END tab 3, row 2

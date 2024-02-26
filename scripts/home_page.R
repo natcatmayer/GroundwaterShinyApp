@@ -4,11 +4,14 @@
 library(shiny)
 library(tidyverse)
 library(bslib)
+library(here)
+
 
 ui <- fluidPage(
   theme = bs_theme(bootswatch = 'minty'),
   
   titlePanel('California Groundwater'),
+  
   tabsetPanel(
     
     tabPanel( ### start tab 1
@@ -68,7 +71,9 @@ ui <- fluidPage(
 
 
 ### Create the server function:
-server <- function(input, output) {}
+server <- function(input, output) {
+  thematic::thematic_shiny() #### ensures that the ggplot2 automatically matches the app theme
+}
 
 ### Combine them into an app:
 shinyApp(ui = ui, server = server)

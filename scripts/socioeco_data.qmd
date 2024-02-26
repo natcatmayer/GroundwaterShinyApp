@@ -51,7 +51,7 @@ demodata <- read_csv(here('data/demodata.csv'))
 ## group_by() and select() are in both dplyr and terra
 ```
 
-#################################################### CES + County Data ####################################################
+############################################## CES + County Data #############################################
 
 ### Edit the CES data
 ```{r}
@@ -65,6 +65,7 @@ colnames(ca_county_ces) <- c('county', 'avg_pctl', 'avg_score')
 ```
 
 ### Create CA County Map and Overlay CES Score Data
+What counties have the highest CES score?
 ```{r}
 ### counties data
 ca_counties_sf <- ca_counties_raw_sf %>% 
@@ -81,7 +82,7 @@ county_ces_join <- merge(ca_county_ces, ca_counties_sf, by="county") %>%
 ### ggplot
 ces_plot <- ggplot(data = county_ces_join) +
   geom_sf(aes(fill = avg_score, geometry = geometry), color = "white", size = 0.1) +
-  scale_fill_gradientn(colors = c("lightgray","orange","red")) +
+  scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
   theme_void() +
   labs(fill = "Average CES Score")
 
@@ -89,9 +90,13 @@ plot(ces_plot)
 ```
 
 
-############################################ Water Quality + CES ##############################################
+######################################## Water Quality + CES ###########################################
 
-### Groundwater Quality vs CES Score
+### Groundwater Quality vs Poverty Score
+
+Questions we want to ask:
+Is the poverty score a good indicator of water quality?
+compare using NLS
 ```{r}
 # convert water quality to sf 
 water_quality_sf <- st_as_sf(x = water_quality, 
@@ -147,114 +152,6 @@ ui <- fluidPage(
   titlePanel('California Groundwater'),
   tabsetPanel(
     
-    tabPanel( ### start tab 1
-      title = 'Home',
-      p('Photo, TOC, purpose, baclground, etc. ')
-         ), ### end tab 1
-    
-    tabPanel( ### start tab 2
-      title = 'Groundwater Levels',
-      
-      fluidRow( # start fluid row 2.1
-        column(width = 3,
-               selectInput("select", label = h3("Select year"),
-                                                     choices = list("2000" = 1, "2001" = 2, "2002" = 3),
-                                                     selected = 1),
-               hr(),
-               fluidRow(column(3, verbatimTextOutput("value"))
-               
-               
-               )
-        ), ### end column
-        column(width = 9,
-               h3('Map Here'),
-               #plotOutput('insert_map')
-        )
-      ), ### end fluidRow 2.1
-      
-      hr(), ### horizontal rule so the row breaks are easier to see
-      p('talk about how they should look at the map'),
-      hr(),
-      
-      fluidRow( # start fluid row 2.2
-        column(
-          width = 3,
-
-          
-          selectInput("county", label = h3("select county"),
-                      choices = list("ventura" = 1, "santa barbara" = 2, "los angeles" = 3),
-                      selected = 1),
-          
-          selectInput("year", label = h3("select year"),
-                      choices = list("2000" = 1, "2001" = 2, "2002" = 3),
-                      selected = 1)
-          
-          
-          ), # end column
-            
-        column(
-          width = 9,
-          h3('Graph here'),
-          plotOutput('insert_graph'))
-        
-      ) ### end fluidRow 2.2
-    
-      
-    ), ### end tab 2
-    
-    tabPanel( ### start tab 3
-      title = 'Groundwater Quality',
-
-      
-      fluidRow( # start fluid row 3.1
-        column(width = 3,
-               h3('select chemical'),
-               
-               radioButtons(
-                 inputId = 'chemical',
-                 label = 'chemical',
-                 choices = c('lead', 'etc.')),
-               
-               
-        ), ### end column
-        
-        column(width = 9,
-               h3('Map Here'),
-               plotOutput('insert_map')
-        ) ### end column
-        
-      ), ### end fluidRow 3.1
-      
-      hr(), ### horizontal rule so the row breaks are easier to see
-      p('talk about how they should look at the map'),
-      hr(),
-      
-      fluidRow( # start fluid row 3.2
-        column(
-          width = 3,
-          
-          selectInput("county", label = h3("Select year"),
-                      choices = list("ventura" = 1, "santa barbara" = 2, "los angeles" = 3),
-                      selected = 1),
-          
-          
-          radioButtons(
-            inputId = 'chemical',
-            label = 'chemical',
-            choices = c(4, 6, 8))
-          
-        ), # end column
-        
-        column(
-          width = 9,
-          h3('Graph here'),
-          plotOutput('insert_graph'))
-      ) ### end fluidRow 3.2
-      
-      
-    
-      
-    ), ### end tab 3  
     
     tabPanel( ### start tab 4
       title = 'Environmental Justice',
@@ -263,14 +160,14 @@ ui <- fluidPage(
       column(width = 3,
                     h3('select demographic'),
                     radioButtons(
-                      inputId = 'demographic',
+                      inputId = 'chemical_4_1',
                       label = 'demographic category',
-                      choices = c(4, 6, 8)
+                      choices = c('Poverty', 'Pollution', 'Cardiovascular Disease')
                     )
         ), ### end column
         column(width = 9,
                     h3('Map Here'),
-                    #plotOutput('insert_map')
+                    plotOutput(outputId = 'ces_plot')
         )
       ), ### end fluidRow 4.1
       
@@ -295,23 +192,37 @@ ui <- fluidPage(
         )
       ) ### end fluidRow 4.2
       
-    ), ### end tab 4 
-    
-    tabPanel( ### start tab 5
-      title = 'Groundwater Dependent Ecosystems',
-      
-      p(' If we have time :-) ')
-      
-    ) ### end tab 5  
-  ) ### end tabsetPanel
+    ) ### end tab 4 
   
+  )
 ) # end Fluidpage
 
 ```
 
 ### Create the server function:
 ``` {r}
-server <- function(input, output) {}
+server <- function(input, output) {
+  
+### START tab 4, row 1
+  soc_select <- reactive({ ### start soc_select
+    soc_df <- county_ces_join %>% 
+      filter(chemical == input$chemical_4_1)
+    
+    return(soc_df)
+  }) ### end soc_select
+  
+  
+ output$ces_plot <- renderPlot({ ### start ces_plot
+   ggplot(data = soc_select) +
+    geom_sf(aes(fill = avg_score, geometry = geometry), color = "white", size = 0.1) +
+    scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
+    theme_void() +
+    labs(fill = "Average CES Score") 
+  
+ }) ### end ces_plot
+### END tab 4, row 1
+ 
+}
 ``` 
 
 

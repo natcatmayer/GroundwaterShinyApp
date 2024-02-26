@@ -170,6 +170,7 @@ ui <- fluidPage(
 ### Create the server function:
 server <- function(input, output) {
   
+  thematic::thematic_shiny() #### ensures that the ggplot2 automatically matches the app theme
   
   ### START tab 2, row 1  
   gw_select <- reactive({ ### start gw_select

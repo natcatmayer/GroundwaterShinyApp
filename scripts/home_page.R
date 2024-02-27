@@ -16,10 +16,16 @@ ui <- fluidPage(
     
     tabPanel( ### start tab 1
       title = 'Home',
-    
-      img(src = "rstudio.png", height = 140, width = 400),
-      p('Photo caption'),
-      hr(), 
+      
+      mainPanel(
+        img(src = "rstudio.png", height = 140, width = 400),
+        p('Photo caption')
+      ),
+      hr(),
+      
+      # img(src = "rstudio.png", height = 140, width = 400),
+      # p('Photo caption'),
+      # hr(), 
       
       fluidRow( # start fluid row 1.1
         
@@ -73,7 +79,7 @@ ui <- fluidPage(
 ### Create the server function:
 server <- function(input, output) {
   thematic::thematic_shiny() #### ensures that the ggplot2 automatically matches the app theme
-
+  
 }
 
 ### Combine them into an app:

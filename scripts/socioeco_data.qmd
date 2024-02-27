@@ -51,9 +51,10 @@ demodata <- read_csv(here('data/demodata.csv'))
 ## group_by() and select() are in both dplyr and terra
 ```
 
-############################################## CES + County Data #############################################
+############################################## CES + County Data
 
 ### Edit the CES data
+
 ```{r}
 ca_county_ces <- demodata %>% 
   drop_na() %>%   
@@ -65,7 +66,9 @@ colnames(ca_county_ces) <- c('county', 'avg_pctl', 'avg_score')
 ```
 
 ### Create CA County Map and Overlay CES Score Data
+
 What counties have the highest CES score?
+
 ```{r}
 ### counties data
 ca_counties_sf <- ca_counties_raw_sf %>% 
@@ -89,14 +92,12 @@ ces_plot <- ggplot(data = county_ces_join) +
 plot(ces_plot)
 ```
 
-
-######################################## Water Quality + CES ###########################################
+######################################## Water Quality + CES
 
 ### Groundwater Quality vs Poverty Score
 
-Questions we want to ask:
-Is the poverty score a good indicator of water quality?
-compare using NLS
+Questions we want to ask: Is the poverty score a good indicator of water quality? compare using NLS
+
 ```{r}
 # convert water quality to sf 
 water_quality_sf <- st_as_sf(x = water_quality, 
@@ -129,23 +130,19 @@ county_water_pivot <- county_water_year %>%
 # co3_plot
 ```
 
-
-
-
-
-
-
-######################################### ShinyApp ################################################
+######################################### ShinyApp
 
 ### Attach necessary packages
-``` {r}
+
+```{r}
 library(shiny)
 library(tidyverse)
 library(bslib)
 ```
 
 ### Create the user interface:
-``` {r}
+
+```{r}
 ui <- fluidPage(
   theme = bs_theme(bootswatch = 'minty'),
   
@@ -200,7 +197,8 @@ ui <- fluidPage(
 ```
 
 ### Create the server function:
-``` {r}
+
+```{r}
 server <- function(input, output) {
   
 ### START tab 4, row 1
@@ -223,20 +221,20 @@ server <- function(input, output) {
 ### END tab 4, row 1
  
 }
-``` 
-
+```
 
 ### Combine them into an app:
+
 ```{r}
 shinyApp(ui = ui, server = server)
 ```
-  
-### Home Page 
 
-### Groundwater depth levels 
+### Home Page
 
-### Chemicals 
+### Groundwater depth levels
 
-### Socioeconomic 
+### Chemicals
 
-### groundwater dependent ecosystems ? 
+### Socioeconomic
+
+### groundwater dependent ecosystems ?

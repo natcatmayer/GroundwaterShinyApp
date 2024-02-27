@@ -17,6 +17,8 @@ ui <- fluidPage(
     tabPanel( ### start tab 1
       title = 'Home',
       
+      imageOutput("image1"),
+      
       img(src = "devereux_slough.png", height = 140, width = 400),
       p('Beautful image of Deveraux Slough ;-)'),
       hr(),
@@ -210,6 +212,13 @@ ui <- fluidPage(
 ### Create the server function:
 server <- function(input, output) {
   
+  output$image1 <- renderImage({
+    
+    list(src = "www/cts.png",
+         width = "100%",
+         height = 330)
+    
+  }, deleteFile = F)
   
 }
 

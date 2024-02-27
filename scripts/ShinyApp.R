@@ -72,6 +72,8 @@ ui <- fluidPage(
     tabPanel( ######################## start tab 1 #############################
       title = 'Home',
       
+      imageOutput("image1"),
+      
       img(src = "devereux_slough.png", height = 140, width = 400),
       p('Beautful image of Deveraux Slough ;-)'),
       hr(),
@@ -416,6 +418,19 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   thematic::thematic_shiny() #### ensures that the ggplot2 automatically matches the app theme
+  
+  #### START tab 1 ####
+  
+  # output$image1 <- renderImage({
+  #   
+  #   list(src = "www/cts.png",
+  #        width = "100%",
+  #        height = 330)
+  #   
+  # }, deleteFile = F)
+  
+  #### END tab 1 #####
+  
   
   ### START tab 2, row 1  
   gw_select <- reactive({ ### start gw_select

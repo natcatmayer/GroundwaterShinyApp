@@ -421,13 +421,13 @@ server <- function(input, output) {
   
   #### START tab 1 ####
   
-  # output$image1 <- renderImage({
-  #   
-  #   list(src = "www/cts.png",
-  #        width = "100%",
-  #        height = 330)
-  #   
-  # }, deleteFile = F)
+  output$image1 <- renderImage({
+
+    list(src = "www/cts.png",
+         width = "100%",
+         height = 330)
+
+  }, deleteFile = F)
   
   #### END tab 1 #####
   

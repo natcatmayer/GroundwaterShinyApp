@@ -60,18 +60,18 @@ ca_counties_sf <- ca_counties_raw_sf %>%
 
 ### join the two together
 county_socio_join <- merge(x = ca_counties_sf, y = socio_county, by = "county", all.x = TRUE) %>% 
-  mutate(density = total_pop/land_km2) %>% 
-  select('county','density', everything(), -'total_pop', -'land_km2') %>% 
+  mutate(density = total_pop/land_km2) %>%
+  select('county','density', everything(), -'total_pop', -'land_km2') %>%
   pivot_longer('density':'unemployment', names_to = 'parameter', values_to = 'percentile')
 
 ### ggplot
 pop_plot <- ggplot(data = county_socio_join) +
-  geom_sf(aes(fill = density, geometry = geometry), color = "white", size = 0.1) +
+  geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
   scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
   theme_void() +
   labs(fill = "Population Density")
 
-plot(pop_plot)
+#plot(pop_plot)
 ```
 
 ######################################## Water Quality + CES
@@ -125,7 +125,7 @@ library(bslib)
 ### Create the user interface:
 
 ```{r}
-vector <- c('total_pop', 'ces', 'low_birth_weight', 'cardio_disease', 'education', 'poverty', 'unemplpoyment')
+# vector <- c('total_pop', 'ces', 'low_birth_weight', 'cardio_disease', 'education', 'poverty', 'unemplpoyment')
 
 ui <- fluidPage(
   theme = bs_theme(bootswatch = 'minty'),
@@ -143,14 +143,16 @@ ui <- fluidPage(
                     radioButtons(
                       inputId = 'factor_4_1',
                       label = 'demographic category',
-                      choices = c('Population Density', 'CES Score', 
-                                  'Low Birth Weight', 'Cardiovascular Disease', 
-                                  'Education', 'Poverty', 'Unemplpoyment')
+                      choices = c("Population Density" = 'density', 'CES Score' = 'ces', 
+                                  'Low Birth Weight' = 'low_birth_weight', 
+                                  'Cardiovascular Disease' = 'cardio_disease', 
+                                  'Education' = 'education', 'Poverty' = 'poverty', 
+                                  'Unemplpoyment' = 'unemployment')
                     )
         ), ### end column
         column(width = 9,
                     h3('Map Here'),
-                    plotOutput(outputId = 'ces_plot')
+                    plotOutput(outputId = 'pop_plot')
         )
       ), ### end fluidRow 4.1
       
@@ -179,10 +181,6 @@ ui <- fluidPage(
   
   )
 ) # end Fluidpage
-
-
-
-
 ```
 
 ### Create the server function:
@@ -199,12 +197,14 @@ server <- function(input, output) {
     return(soc_df)
   }) ### end soc_select
   
-    output$ces_plot <- renderPlot({ ### start ces_plot
-       ggplot(data = soc_select) +
-        geom_sf(aes(fill = soc_df, geometry = geometry), color = "white", size = 0.1) +
+    output$pop_plot <- renderPlot({ ### start ces_plot
+       ggplot(data = soc_select()) +
+        geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
         scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
-        theme_void() +
-        labs(fill = "Population") 
+        theme_void() 
+      
+      # +
+      #   labs(fill = "Population") 
 
   
  }) ### end ces_plot

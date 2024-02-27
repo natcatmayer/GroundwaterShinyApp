@@ -17,12 +17,6 @@ ui <- fluidPage(
     tabPanel( ### start tab 1
       title = 'Home',
       
-      # mainPanel(
-      #   img(src = "rstudio.png", height = 140, width = 400),
-      #   p('Photo caption')
-      # ),
-      # hr(),
-      
       img(src = "devereux_slough.png", height = 140, width = 400),
       p('Beautful image of Deveraux Slough ;-)'),
       hr(),

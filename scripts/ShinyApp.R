@@ -58,7 +58,6 @@ county_gw_avg <- county_gw %>%
   summarise(average_depth = mean(depth_to_water))
 
 water_county_avg <- county_water %>%
-  drop_na() %>%
   group_by(county, chemical, year) %>%
   summarise(avg_measure = mean(measurement))
 
@@ -446,7 +445,7 @@ server <- function(input, output) {
     ggplot(data = gw_select()) + 
       geom_sf(aes(fill = average_depth), color = "white", size = 0.1) + 
       scale_fill_gradientn(colors = c("lightgray", "yellow", "orange", "red")) + 
-      theme_minimal() + 
+      theme_void() + 
       labs(fill = 'Groundwater Depth')
   }) ### end gw_plot
   ### END tab 2, row 1 
@@ -462,7 +461,7 @@ server <- function(input, output) {
   
   output$gw_plot_2 <- renderPlot({
     ggplot(data = gw_select_1()) + 
-      geom_col(aes(x = year, y = average_depth)) + 
+      geom_col(aes(x = year, y = average_depth), fill = "red3") + 
       labs(x = "Year", 
            y = "Average Groundwater Depth") +
     theme_minimal()
@@ -482,9 +481,9 @@ server <- function(input, output) {
   
   output$chemical_map <- renderPlot({
     ggplot(data = county_chemical_select_1()) + 
-      geom_sf(aes(fill = avg_measure), color = "white", size = 0.1) + 
+      geom_sf(aes(fill = avg_measure), color = "lightgray", size = 0.1) + 
       scale_fill_continuous(low = "lightblue", high = "navy", guide = "colorbar", na.value = "lightgray") + 
-      theme_minimal() + 
+      theme_void() + 
       labs(fill = 'Chemical Concentration in Groundwater')
   })
   
@@ -502,7 +501,7 @@ server <- function(input, output) {
   
   output$chemical_plot <- renderPlot({
     ggplot(data = county_chemical_select()) + 
-      geom_col(aes(x = year, y = avg_measure), color = "navy") + 
+      geom_col(aes(x = year, y = avg_measure), fill = "navy") + 
       theme_minimal()
   })
   

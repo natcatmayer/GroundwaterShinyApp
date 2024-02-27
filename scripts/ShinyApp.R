@@ -372,7 +372,9 @@ ui <- fluidPage(
                     radioButtons(
                       inputId = 'demographic',
                       label = 'demographic category',
-                      choices = c(4, 6, 8)
+                      choices = c('Population Density', 'CES Score', 
+                                  'Low Birth Weight', 'Cardiovascular Disease', 
+                                  'Education', 'Poverty', 'Unemplpoyment')
                     )
         ), ### end column
         column(width = 9,

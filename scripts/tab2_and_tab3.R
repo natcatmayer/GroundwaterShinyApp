@@ -30,10 +30,12 @@ county_water <- st_join(ca_counties_sf, water_quality_sf)
 water_county <- st_join(water_quality_sf, ca_counties_sf)
 
 water_county <- water_county %>%
-  separate(date, c("year", "month", "day"))
+  separate(date, c("year", "month", "day")) %>%
+  complete(county, chemical, year)
 
 county_water <- county_water %>%
-  separate(date, c("year", "month", "day"))
+  separate(date, c("year", "month", "day")) %>%
+  complete(county, chemical, year)
 
 # convert depth to sf 
 
@@ -49,13 +51,17 @@ depth_sf <- st_transform(depth_sf, 3857)
 gw_county <- st_join(depth_sf, ca_counties_sf)
 county_gw <- st_join(ca_counties_sf, depth_sf)
 
+county_gw %>% complete(county, year, depth_to_water)
+
+# average county measurements 
+
 county_gw_avg <- county_gw %>%
-  drop_na() %>%
+  filter(year <= 1963) %>%
   group_by(county, year) %>%
   summarise(average_depth = mean(depth_to_water))
 
 water_county_avg <- county_water %>%
-  drop_na() %>%
+  filter(year <= 1963) %>%
   group_by(county, chemical, year) %>%
   summarise(avg_measure = mean(measurement))
 

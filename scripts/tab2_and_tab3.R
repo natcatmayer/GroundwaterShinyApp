@@ -7,7 +7,7 @@ library(sf)
 # load water data 
 
 water_quality <- read_csv(here('data', 'water_quality.csv'))
-depth_df <- read_csv(here('data', 'groundwater_depth.csv'))
+depth_df <- read_tsv(here('data', 'gama.txt'))
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
 
 ca_counties_sf <- ca_counties_raw_sf %>% 
@@ -39,6 +39,8 @@ county_water <- county_water %>%
 
 # convert depth to sf 
 
+depth_df <- depth_df %>% 
+  janitor::clean_names()
 
 depth_sf <- st_as_sf(x = depth_df, 
                      coords = c('longitude', 'latitude'), 
@@ -51,17 +53,26 @@ depth_sf <- st_transform(depth_sf, 3857)
 gw_county <- st_join(depth_sf, ca_counties_sf)
 county_gw <- st_join(ca_counties_sf, depth_sf)
 
-county_gw %>% complete(county, year, depth_to_water)
+county_gw <- county_gw %>% 
+  select(county, measurement_date, depth_to_water) %>%
+  mutate(date = lubridate::mdy(measurement_date)) %>%
+  separate(date, c("year", "month", "day")) %>%
+  select(county, year, depth_to_water) 
 
 # average county measurements 
 
 county_gw_avg <- county_gw %>%
-  filter(year <= 1963) %>%
+  filter(year >= 1963) %>%
   group_by(county, year) %>%
-  summarise(average_depth = mean(depth_to_water))
+  summarise(average_depth = mean(depth_to_water)) 
+
+county_gw_avg_16 <- county_gw_avg %>%
+  filter(year >= 2016)
+
+write_csv(county_gw_avg_16, here('data', 'county_gw_avg_16.csv'))
 
 water_county_avg <- county_water %>%
-  filter(year <= 1963) %>%
+  filter(year >= 1963) %>%
   group_by(county, chemical, year) %>%
   summarise(avg_measure = mean(measurement))
 

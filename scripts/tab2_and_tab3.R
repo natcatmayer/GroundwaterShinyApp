@@ -7,7 +7,7 @@ library(sf)
 # load water data 
 
 water_quality <- read_csv(here('data', 'water_quality.csv'))
-depth_df <- read_tsv(here('data', 'gama.txt'))
+county_gw_avg_16 <- readRDS(here('data', 'county_gw_avg_16.rds'))
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
 
 ca_counties_sf <- ca_counties_raw_sf %>% 
@@ -37,44 +37,45 @@ county_water <- county_water %>%
   separate(date, c("year", "month", "day")) %>%
   complete(county, chemical, year)
 
-# convert depth to sf 
+# convert depth to sf
 
-depth_df <- depth_df %>% 
+depth_df <- depth_df %>%
   janitor::clean_names()
 
-depth_sf <- st_as_sf(x = depth_df, 
-                     coords = c('longitude', 'latitude'), 
+depth_sf <- st_as_sf(x = depth_df,
+                     coords = c('longitude', 'latitude'),
                      crs = 4326)
 
 depth_sf <- st_transform(depth_sf, 3857)
 
-# combine groundwater depth and ca counties 
+# combine groundwater depth and ca counties
 
-gw_county <- st_join(depth_sf, ca_counties_sf)
-county_gw <- st_join(ca_counties_sf, depth_sf)
-
-county_gw <- county_gw %>% 
-  select(county, measurement_date, depth_to_water) %>%
-  mutate(date = lubridate::mdy(measurement_date)) %>%
-  separate(date, c("year", "month", "day")) %>%
-  select(county, year, depth_to_water) 
-
-# average county measurements 
-
-county_gw_avg <- county_gw %>%
-  filter(year >= 1963) %>%
-  group_by(county, year) %>%
-  summarise(average_depth = mean(depth_to_water)) 
-
-county_gw_avg_16 <- county_gw_avg %>%
-  filter(year >= 2016)
-
-write_csv(county_gw_avg_16, here('data', 'county_gw_avg_16.csv'))
+# gw_county <- st_join(depth_sf, ca_counties_sf)
+# county_gw <- st_join(ca_counties_sf, depth_sf)
+# 
+# county_gw <- county_gw %>%
+#   select(county, measurement_date, depth_to_water) %>%
+#   mutate(date = lubridate::mdy(measurement_date)) %>%
+#   separate(date, c("year", "month", "day")) %>%
+#   select(county, year, depth_to_water)
+# 
+# # average county measurements
+# 
+# county_gw_avg <- county_gw %>%
+#   filter(year >= 1963) %>%
+#   group_by(county, year) %>%
+#   summarise(average_depth = mean(depth_to_water))
+# 
+# county_gw_avg_16 <- county_gw_avg %>%
+#   filter(year >= 2016)
+# 
+# saveRDS(county_gw_avg_16, here('data', 'county_gw_avg_16.rds'))
 
 water_county_avg <- county_water %>%
-  filter(year >= 1963) %>%
+  filter(year >= 1975) %>%
   group_by(county, chemical, year) %>%
-  summarise(avg_measure = mean(measurement))
+  summarise(avg_measure = mean(measurement)) %>%
+  complete(avg_measure)
 
 ########### shiny app ##############################
 library(shiny)
@@ -92,8 +93,8 @@ tabPanel( ### start tab 2
     column(width = 3,
     
     
-    sliderInput("year_2_1", label = h3("Select Year"), min = 2022, 
-                max = 2024, value = 2024, sep = "")
+    sliderInput("year_2_1", label = h3("Select Year"), min = 2016, 
+                max = 2023, value = 2023, sep = "")
                     
                     
     ), ### end column
@@ -141,10 +142,10 @@ tabPanel( ### start tab 3
            radioButtons(
              inputId = 'chemical_3_1',
              label = 'chemical',
-             choices = unique(water_quality_sf$chemical)),
+             choices = unique(water_county_avg$chemical)),
            
            sliderInput("year_3_1", label = h3("Select Year"), 
-                       min = 1990, max = 2024, value = 2024, sep = "")
+                       min = 1975, max = 2023, value = 2023, sep = "")
            
     ), ### end column
     
@@ -163,14 +164,14 @@ tabPanel( ### start tab 3
       width = 3,
       
       selectInput("county_3_2", label = h3("Select County"),
-                  choices = unique(water_county$county),
+                  choices = unique(water_county_avg$county),
                   selected = 1),
       
       
       radioButtons(
         inputId = 'chemical_3_2',
         label = 'chemical',
-        choices = unique(water_county$chemical))
+        choices = unique(water_county_avg$chemical))
       
     ), # end column
     
@@ -197,7 +198,7 @@ server <- function(input, output) {
  
 ### START tab 2, row 1  
   gw_select <- reactive({ ### start gw_select
-    gw_county_df <- county_gw_avg %>%
+    gw_county_df <- county_gw_avg_16 %>%
       filter(year %in% input$year_2_1)
     
     return(gw_county_df)
@@ -205,8 +206,8 @@ server <- function(input, output) {
   
   output$gw_plot <- renderPlot({ ### start gw_plot
     ggplot(data = gw_select()) + 
-      geom_sf(aes(fill = average_depth), color = "white", size = 0.1) + 
-      scale_fill_gradientn(colors = c("lightgray", "yellow", "orange", "red")) + 
+      geom_sf(aes(fill = average_depth), color = "gray", size = 0.1) + 
+      scale_fill_continuous(low = "yellow", high = "red", guide = "colorbar", na.value = "white") + 
       theme_minimal() + 
       labs(fill = 'Groundwater Depth')
   }) ### end gw_plot
@@ -215,7 +216,7 @@ server <- function(input, output) {
 ### START tab 2, row 2
   
 gw_select_1 <- reactive({
-  gw_county_df_1 <- county_gw_avg %>%
+  gw_county_df_1 <- county_gw_avg_16 %>%
     filter(county %in% input$county_2_2)
   
   return(gw_county_df_1)
@@ -243,8 +244,8 @@ county_chemical_select_1 <- reactive({
 
 output$chemical_map <- renderPlot({
   ggplot(data = county_chemical_select_1()) + 
-    geom_sf(aes(fill = avg_measure), color = "white", size = 0.1) + 
-    scale_fill_continuous(low = "lightblue", high = "navy", guide = "colorbar", na.value = "lightgray") + 
+    geom_sf(aes(fill = avg_measure), color = "gray", size = 0.1) + 
+    scale_fill_continuous(low = "lightblue", high = "navy", guide = "colorbar", na.value = "white") + 
     theme_minimal() + 
     labs(fill = 'Chemical Concentration in Groundwater')
 })

@@ -21,7 +21,6 @@ ca_counties_sf <- ca_counties_raw_sf %>%
 
 
 # convert water quality to sf 
-
 water_quality_sf <- st_as_sf(x = water_quality, 
                              coords = c('longitude', 'latitude'), 
                              crs = 4326)
@@ -29,7 +28,6 @@ water_quality_sf <- st_as_sf(x = water_quality,
 water_quality_sf <- st_transform(water_quality_sf, 3857)
 
 # combine water quality and county data 
-
 county_water <- st_join(ca_counties_sf, water_quality_sf)
 water_county <- st_join(water_quality_sf, ca_counties_sf)
 
@@ -40,8 +38,6 @@ county_water <- county_water %>%
   separate(date, c("year", "month", "day"))
 
 # convert depth to sf 
-
-
 depth_sf <- st_as_sf(x = depth_df, 
                      coords = c('longitude', 'latitude'), 
                      crs = 4326)
@@ -49,7 +45,6 @@ depth_sf <- st_as_sf(x = depth_df,
 depth_sf <- st_transform(depth_sf, 3857)
 
 # combine groundwater depth and ca counties 
-
 gw_county <- st_join(depth_sf, ca_counties_sf)
 county_gw <- st_join(ca_counties_sf, depth_sf)
 
@@ -86,7 +81,7 @@ ca_counties_sf2 <- ca_counties_raw_sf %>%
   mutate(land_km2 = aland / 1e6) %>%
   select(county = name, land_km2) %>% 
   mutate(county = str_squish(county)) 
-#ca_counties_sf2 %>% st_crs() ###3857
+  #ca_counties_sf2 %>% st_crs() ###3857
 
 ### join the two together
 county_socio_join <- merge(x = ca_counties_sf2, y = socio_county, by = "county", all.x = TRUE) %>% 
@@ -222,7 +217,7 @@ ui <- fluidPage(
                
                h4(("Tab 3: Environmental Justice")),
                             p("This analysis shows socioeconomic variables mapped by percentile in each county. Socioeconomic variables 
-                            explore in this analysis include:"),
+                            explored in this analysis include:"),
                
                                    ##### How do I make these bullet points?? #####
                                    p(tags$b("Population Density,
@@ -242,7 +237,7 @@ ui <- fluidPage(
                     (mg/L), arsenic (ug/L), and lead (ug/L)."),
                br(),
                
-               h2(strong("Data Source")),
+               h2(strong("Data Sources")),
                hr(),
                p("Groundwater depth and water quality data:"),
                       p("The Groundwater Ambient Monitoring and Assessment (GAMA) Program is California's comprehensive 
@@ -406,12 +401,19 @@ ui <- fluidPage(
     tabPanel( ############################ start tab 4 ######################
       title = 'Environmental Justice',
   
+      h4('Description:'), 
+      p('This tab shows socioeconomic and health indicators mapped by percentile in each county. 
+        An indicator measures environmental conditions as well as health and vulnerability factors. 
+        The CalEnviroScreen indicators fall into four categories: exposure, environmental, sensitive population, 
+        and socioeconomic. Here, we have selected relevant sensitive population and socioeconomic indicators, 
+        which may be correlated with groundwater quality.'),
+      hr(),
       fluidRow( # start fluid row 4.1
-        column(width = 3,
-               h3('select demographic'),
+        column(width = 5,
+               h4('Socioeconomic Indicator'),
                radioButtons(
                  inputId = 'factor_4_1',
-                 label = 'demographic category',
+                 label = ' ',
                  choices = c('Population Density' = 'density', 
                              'CES Score' = 'ces', 
                              'Low Birth Weight' = 'low_birth_weight', 
@@ -421,8 +423,8 @@ ui <- fluidPage(
                              'Unemplpoyment' = 'unemployment')
                )
         ), ### end column
-        column(width = 9,
-               h3('Map Here'),
+        column(width = 7,
+               h4('Map of California Counties'),
                plotOutput(outputId = 'pop_plot')
         )
       ), ### end fluidRow 4.1

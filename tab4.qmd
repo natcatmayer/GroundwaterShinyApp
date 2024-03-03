@@ -71,7 +71,7 @@ pop_plot <- ggplot(data = county_socio_join) +
   theme_void() +
   labs(fill = "Population Density")
 
-plot(pop_plot)
+# plot(pop_plot)
 ```
 
 ################################### Tab 4 Row 2 - Graphs #######################
@@ -163,13 +163,16 @@ ui <- fluidPage(
     
     tabPanel( ### start tab 4
       title = 'Environmental Justice',
-  
+      
+      h4('Description:'), 
+      p('This tab shows socioeconomic and health indicators mapped by percentile in each county. An indicator measures environmental conditions as well as health and vulnerability factors. The CalEnviroScreen indicators fall into four categories: exposure, environmental, sensitive population, and socioeconomic. Here, we have selected relevant sensitive population and socioeconomic indicators, which may be correlated with groundwater quality.'),
+      hr(),
       fluidRow( # start fluid row 4.1
-      column(width = 3,
-                    h3('select demographic'),
+      column(width = 5,
+                    h4('Socioeconomic Indicator'),
                     radioButtons(
                       inputId = 'factor_4_1',
-                      label = 'demographic category',
+                      label = ' ',
                       choices = c('Population Density' = 'density', 
                                   'CES Score' = 'ces', 
                                   'Low Birth Weight' = 'low_birth_weight', 
@@ -179,8 +182,8 @@ ui <- fluidPage(
                                   'Unemplpoyment' = 'unemployment')
                     )
         ), ### end column
-        column(width = 9,
-                    h3('Map Here'),
+        column(width = 7,
+                    h4('Map of California Counties'),
                     plotOutput(outputId = 'pop_plot')
         )
       ), ### end fluidRow 4.1

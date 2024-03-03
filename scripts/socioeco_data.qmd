@@ -17,9 +17,38 @@ library(dplyr)
 ### Load in the Data
 
 ```{r}
+groundwater_depth <- read_csv(here('data/groundwater_depth.csv'))
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
-socioeco_data <- read.csv(here('data/socioeco.csv'))
 water_quality <- read_csv(here('data/water_quality.csv'))
+
+socioecodata <- read.csv(here('data/socioeco.csv'))
+demodata <- read_csv(here('data/demodata.csv')) 
+```
+
+### Cut, clean, and rewrite data
+
+```{r}
+# ### demographic data
+# demodata <- read.csv(here('data/demodata.csv')) 
+# 
+# first_row <- demodata[1, ] 
+# colnames(demodata) <- as.character(first_row)
+# 
+# demodatamod <- demodata %>% 
+#   janitor::clean_names() %>% 
+#   filter(row_number() > 1) %>% 
+#   select(-census_tract, -children_10_years_percent, -pop_10_64_years_percent, -elderly_64_years_percent)
+# 
+# write_csv(demodatamod, here('data/demodata.csv'))
+# 
+# ### Socioeconomic data
+# socioecodata <- read.csv(here('data/cal_enviro_data.csv')) %>% 
+#   janitor::clean_names() %>% 
+#  select(california_county, longitude, latitude,ces_4_0_score, ces_4_0_percentile, ces_4_0_percentile_range, # drinking_water, drinking_water_pctl, lead, lead_pctl, poverty, poverty_pctl)
+# 
+# write_csv(socioecodata, here('data/socioeco.csv'))
+
+## group_by() and select() are in both dplyr and terra
 ```
 
 ############################################## CES + County Data
@@ -27,22 +56,13 @@ water_quality <- read_csv(here('data/water_quality.csv'))
 ### Edit the CES data
 
 ```{r}
-socio_by_county <- socioeco_data %>% 
+ca_county_ces <- demodata %>% 
+  drop_na() %>%   
   dplyr::group_by(california_county) %>% 
-  summarize(total_pop = sum(total_population, na.rm = TRUE),
-            ces = mean(ces_4_0_percentile, na.rm = TRUE),
-            low_birth_weight = mean(low_birth_weight_pctl, na.rm = TRUE),
-            cardio_disease = mean(cardiovascular_disease_pctl, na.rm = TRUE),
-            education = mean(education_pctl, na.rm = TRUE),
-            poverty = mean(poverty_pctl, na.rm = TRUE),
-            unemployment = mean(unemployment_pctl, na.rm = TRUE))
+  summarize(avg_pctl = mean(ces_4_0_percentile, na.rm = TRUE),
+            avg_score = mean(ces_4_0_score,na.rm = TRUE)) 
 
-socio_by_county$county <- socio_by_county$california_county 
-
-socio_county <- socio_by_county %>% 
-  select(-california_county) %>% 
-  select(county, everything()) %>% 
-  mutate(county = str_squish(county))
+colnames(ca_county_ces) <- c('county', 'avg_pctl', 'avg_score')
 ```
 
 ### Create CA County Map and Overlay CES Score Data
@@ -54,25 +74,59 @@ What counties have the highest CES score?
 ca_counties_sf <- ca_counties_raw_sf %>% 
   janitor::clean_names() %>%
   mutate(land_km2 = aland / 1e6) %>%
-  select(county = name, land_km2) %>% 
-  mutate(county = str_squish(county)) 
+  select(county = name, land_km2)
 #ca_counties_sf %>% st_crs() ###3857
 
+
 ### join the two together
-county_socio_join <- merge(x = ca_counties_sf, y = socio_county, by = "county", all.x = TRUE) %>% 
-  mutate(density = total_pop/land_km2) %>%
-  select('county','density', everything(), -'total_pop', -'land_km2') %>%
-  pivot_longer('density':'unemployment', names_to = 'parameter', values_to = 'percentile')
+county_ces_join <- merge(ca_county_ces, ca_counties_sf, by="county") %>% 
+  select(-land_km2, -avg_pctl)
 
 ### ggplot
-pop_plot <- ggplot(data = county_socio_join) +
-  geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
+ces_plot <- ggplot(data = county_ces_join) +
+  geom_sf(aes(fill = avg_score, geometry = geometry), color = "white", size = 0.1) +
   scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
   theme_void() +
-  labs(fill = "Population Density")
+  labs(fill = "Average CES Score")
 
-#plot(pop_plot)
+plot(ces_plot)
 ```
+###################################### Graph ######################################
+
+```{r}
+poverty_cardio_plot <- ggplot() +
+  geom_col(data = county_socio_join, 
+                              aes(x = county, y = percentile, fill = parameter)) +
+  theme_minimal()
+
+poverty_cardio_plot
+
+
+### START tab 2, row 2
+  
+gw_select_1 <- reactive({
+  gw_county_df_1 <- county_gw_avg_16 %>%
+    filter(county %in% input$county_2_2)
+  
+  return(gw_county_df_1)
+})  ### end gw_select_1
+
+output$gw_plot_2 <- renderPlot({
+  ggplot(data = gw_select_1()) + 
+    geom_col(aes(x = year, y = average_depth)) + 
+    labs(x = "Year", 
+         y = "Average Groundwater Depth")
+    theme_minimal()
+})
+```
+
+
+
+
+
+
+
+
 
 ######################################## Water Quality + CES
 
@@ -81,7 +135,7 @@ pop_plot <- ggplot(data = county_socio_join) +
 Questions we want to ask: Is the poverty score a good indicator of water quality? compare using NLS
 
 ```{r}
-# # convert water quality to sf 
+# convert water quality to sf 
 # water_quality_sf <- st_as_sf(x = water_quality, 
 #                              coords = c('longitude', 'latitude'), 
 #                              crs = 4326)
@@ -125,8 +179,6 @@ library(bslib)
 ### Create the user interface:
 
 ```{r}
-# vector <- c('total_pop', 'ces', 'low_birth_weight', 'cardio_disease', 'education', 'poverty', 'unemplpoyment')
-
 ui <- fluidPage(
   theme = bs_theme(bootswatch = 'minty'),
   
@@ -141,18 +193,14 @@ ui <- fluidPage(
       column(width = 3,
                     h3('select demographic'),
                     radioButtons(
-                      inputId = 'factor_4_1',
+                      inputId = 'chemical_4_1',
                       label = 'demographic category',
-                      choices = c("Population Density" = 'density', 'CES Score' = 'ces', 
-                                  'Low Birth Weight' = 'low_birth_weight', 
-                                  'Cardiovascular Disease' = 'cardio_disease', 
-                                  'Education' = 'education', 'Poverty' = 'poverty', 
-                                  'Unemplpoyment' = 'unemployment')
+                      choices = c('Poverty', 'Pollution', 'Cardiovascular Disease')
                     )
         ), ### end column
         column(width = 9,
                     h3('Map Here'),
-                    plotOutput(outputId = 'pop_plot')
+                    plotOutput(outputId = 'ces_plot')
         )
       ), ### end fluidRow 4.1
       
@@ -181,6 +229,7 @@ ui <- fluidPage(
   
   )
 ) # end Fluidpage
+
 ```
 
 ### Create the server function:
@@ -190,26 +239,23 @@ server <- function(input, output) {
   
 ### START tab 4, row 1
   soc_select <- reactive({ ### start soc_select
-    soc_df <- county_socio_join %>% 
-      filter(parameter == input$factor_4_1)
-    #select(geometry, tmp = all_of(input$demographics))
+    soc_df <- county_ces_join %>% 
+      filter(chemical == input$chemical_4_1)
     
     return(soc_df)
   }) ### end soc_select
   
-    output$pop_plot <- renderPlot({ ### start ces_plot
-       ggplot(data = soc_select()) +
-        geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
-        scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
-        theme_void() 
-      
-      # +
-      #   labs(fill = "Population") 
-
+  
+ output$ces_plot <- renderPlot({ ### start ces_plot
+   ggplot(data = soc_select) +
+    geom_sf(aes(fill = avg_score, geometry = geometry), color = "white", size = 0.1) +
+    scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
+    theme_void() +
+    labs(fill = "Average CES Score") 
   
  }) ### end ces_plot
 ### END tab 4, row 1
- 
+
 }
 ```
 

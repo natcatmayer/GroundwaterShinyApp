@@ -307,7 +307,7 @@ ui <- fluidPage(
     ), ### end tab 2
     
     
-    tabPanel( ### start tab 3
+    tabPanel( ###################### start tab 3 ###########################
       title = 'Groundwater Quality',
       
       
@@ -362,7 +362,7 @@ ui <- fluidPage(
       
     ), ### end tab 3  
     
-    tabPanel( ### start tab 4
+    tabPanel( ############################ start tab 4 ######################
       title = 'Environmental Justice',
   
       fluidRow( # start fluid row 4.1

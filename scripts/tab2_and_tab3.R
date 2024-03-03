@@ -38,14 +38,22 @@ water_county <- water_county %>%
 county_water <- county_water %>%
   separate(date, c("year", "month", "day"))
 
+county_water_quality <- county_water %>%
+  select(year, county, chemical, measurement, units) %>%
+  filter(year >= 1975)
+  
+county_water_quality_df <- county_water_quality %>%
+  complete(county, chemical, year) %>%
+  fill(geometry, .direction = 'down')
+
+
 # convert depth to sf 
-
-
 depth_sf <- st_as_sf(x = depth_df, 
                      coords = c('longitude', 'latitude'), 
                      crs = 4326)
 
 depth_sf <- st_transform(depth_sf, 3857)
+
 
 # combine groundwater depth and ca counties 
 
@@ -53,12 +61,11 @@ gw_county <- st_join(depth_sf, ca_counties_sf)
 county_gw <- st_join(ca_counties_sf, depth_sf)
 
 county_gw_avg <- county_gw %>%
-  drop_na() %>%
   group_by(county, year) %>%
   summarise(average_depth = mean(depth_to_water))
 
-water_county_avg <- county_water %>%
-  group_by(county, chemical, year) %>%
+water_county_avg <- county_water_quality_df %>%
+  group_by(county, chemical, year, geometry) %>%
   summarise(avg_measure = mean(measurement))
 
 
@@ -77,12 +84,12 @@ ui <- fluidPage(
                        
                        
                        sliderInput("year_2_1", label = h3("Select Year"), min = 2022, 
-                                   max = 2024, value = 2024, sep = "")
+                                   max = 2023, value = 2023, sep = "")
                        
                        
                 ), ### end column
                 column(width = 9,
-                       h3('Map Here'),
+                       h3('California Counties Groundwater Depth'),
                        plotOutput(outputId = 'gw_plot')
                 )
               ), ### end fluidRow 2.1
@@ -105,7 +112,7 @@ ui <- fluidPage(
                 
                 column(
                   width = 9,
-                  h3('Graph here'),
+                  h3('California Groundwater Depth by County'),
                   plotOutput(outputId = 'gw_plot_2'))
                 
               ) ### end fluidRow 2.2
@@ -128,7 +135,7 @@ ui <- fluidPage(
                  choices = unique(water_quality_sf$chemical)),
                
                sliderInput("year_3_1", label = h3("Select Year"), 
-                           min = 1990, max = 2024, value = 2024, sep = "")
+                           min = 1975, max = 2023, value = 2023, sep = "")
                
         ), ### end column
         
@@ -149,7 +156,6 @@ ui <- fluidPage(
           selectInput("county_3_2", label = h3("Select County"),
                       choices = unique(water_county$county),
                       selected = 1),
-          
           
           radioButtons(
             inputId = 'chemical_3_2',
@@ -177,20 +183,6 @@ ui <- fluidPage(
 
 ### Create the server function:
 server <- function(input, output) {
-  
-  thematic::thematic_shiny() #### ensures that the ggplot2 automatically matches the app theme
-  
-  #### START tab 1 ####
-  
-  output$image1 <- renderImage({
-    
-    list(src = "www/cts.png",
-         width = "100%",
-         height = 330)
-    
-  }, deleteFile = F)
-  
-  #### END tab 1 #####
   
   
   ### START tab 2, row 1  
@@ -221,7 +213,7 @@ server <- function(input, output) {
   
   output$gw_plot_2 <- renderPlot({
     ggplot(data = gw_select_1()) + 
-      geom_col(aes(x = year, y = average_depth), fill = "red3") + 
+      geom_path(aes(x = year, y = average_depth), color = "red3") + 
       labs(x = "Year", 
            y = "Average Groundwater Depth") +
       theme_minimal()
@@ -236,7 +228,6 @@ server <- function(input, output) {
       filter(chemical == input$chemical_3_1) %>%
       filter(year %in% input$year_3_1)
     
-    return(county_chemical_df_1)
   }) ### end county_chemical_select_1
   
   output$chemical_map <- renderPlot({
@@ -251,12 +242,22 @@ server <- function(input, output) {
   
   ### START tab 3, row 2
   
+  observeEvent(input$county_3_2, {
+    county_chemical_df <- water_county_avg %>%
+      filter(county == input$county_3_2)
+    
+    chemical_vec <- county_chemical_df$chemical %>% unique() 
+    
+    updateRadioButtons(
+      inputId = 'chemical', 
+      choices = chemical_vec
+    )
+  })
+  
   county_chemical_select <- reactive({
     county_chemical_df <- water_county_avg %>%
       filter(chemical == input$chemical_3_2) %>%
       filter(county == input$county_3_2)
-    
-    return(county_chemical_df)
   }) ### end county chemical select 
   
   output$chemical_plot <- renderPlot({

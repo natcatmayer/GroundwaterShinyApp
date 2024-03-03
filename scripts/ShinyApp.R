@@ -12,6 +12,7 @@ library(bslib)
 water_quality <- read_csv(here('data', 'water_quality.csv'))
 depth_df <- read_csv(here('data', 'groundwater_depth.csv'))
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
+socioeco_data <- read.csv(here('data/socioeco.csv'))
 
 ca_counties_sf <- ca_counties_raw_sf %>% 
   janitor::clean_names() %>%
@@ -61,7 +62,47 @@ water_county_avg <- county_water %>%
   group_by(county, chemical, year) %>%
   summarise(avg_measure = mean(measurement))
 
-### Create the user interface:
+# Socioeconmic data wrangling 
+socio_by_county <- socioeco_data %>% 
+dplyr::group_by(california_county) %>% 
+  summarize(total_pop = sum(total_population, na.rm = TRUE),
+            ces = mean(ces_4_0_percentile, na.rm = TRUE),
+            low_birth_weight = mean(low_birth_weight_pctl, na.rm = TRUE),
+            cardio_disease = mean(cardiovascular_disease_pctl, na.rm = TRUE),
+            education = mean(education_pctl, na.rm = TRUE),
+            poverty = mean(poverty_pctl, na.rm = TRUE),
+            unemployment = mean(unemployment_pctl, na.rm = TRUE))
+
+socio_by_county$county <- socio_by_county$california_county 
+
+socio_county <- socio_by_county %>% 
+  select(-california_county) %>% 
+  select(county, everything()) %>% 
+  mutate(county = str_squish(county))
+
+### counties data
+ca_counties_sf2 <- ca_counties_raw_sf %>% 
+  janitor::clean_names() %>%
+  mutate(land_km2 = aland / 1e6) %>%
+  select(county = name, land_km2) %>% 
+  mutate(county = str_squish(county)) 
+#ca_counties_sf2 %>% st_crs() ###3857
+
+### join the two together
+county_socio_join <- merge(x = ca_counties_sf2, y = socio_county, by = "county", all.x = TRUE) %>% 
+  mutate(density = total_pop/land_km2) %>%
+  select('county','density', everything(), -'total_pop', -'land_km2') %>%
+  pivot_longer('density':'unemployment', names_to = 'parameter', values_to = 'percentile')
+
+### ggplot
+pop_plot <- ggplot(data = county_socio_join) +
+  geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
+  scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
+  theme_void() +
+  labs(fill = "Population Density")
+
+
+################## Create the user interface: ############################
 ui <- fluidPage(
   theme = bs_theme(bootswatch = 'minty'),
   
@@ -366,19 +407,23 @@ ui <- fluidPage(
       title = 'Environmental Justice',
   
       fluidRow( # start fluid row 4.1
-      column(width = 3,
-                    h3('select demographic'),
-                    radioButtons(
-                      inputId = 'demographic',
-                      label = 'demographic category',
-                      choices = c('Population Density', 'CES Score', 
-                                  'Low Birth Weight', 'Cardiovascular Disease', 
-                                  'Education', 'Poverty', 'Unemplpoyment')
-                    )
+        column(width = 3,
+               h3('select demographic'),
+               radioButtons(
+                 inputId = 'factor_4_1',
+                 label = 'demographic category',
+                 choices = c('Population Density' = 'density', 
+                             'CES Score' = 'ces', 
+                             'Low Birth Weight' = 'low_birth_weight', 
+                             'Cardiovascular Disease' = 'cardio_disease', 
+                             'Education' = 'education', 
+                             'Poverty' = 'poverty', 
+                             'Unemplpoyment' = 'unemployment')
+               )
         ), ### end column
         column(width = 9,
-                    h3('Map Here'),
-                    #plotOutput('insert_map')
+               h3('Map Here'),
+               plotOutput(outputId = 'pop_plot')
         )
       ), ### end fluidRow 4.1
       
@@ -451,7 +496,6 @@ server <- function(input, output) {
   ### END tab 2, row 1 
   
   ### START tab 2, row 2
-  
   gw_select_1 <- reactive({
     gw_county_df_1 <- county_gw_avg %>%
       filter(county %in% input$county_2_2)
@@ -466,11 +510,9 @@ server <- function(input, output) {
            y = "Average Groundwater Depth") +
     theme_minimal()
   })
-  
   ### END tab 2, row 2
   
   ### START tab 3, row 1
-  
   county_chemical_select_1 <- reactive({
     county_chemical_df_1 <- water_county_avg %>%
       filter(chemical == input$chemical_3_1) %>%
@@ -486,11 +528,9 @@ server <- function(input, output) {
       theme_void() + 
       labs(fill = 'Chemical Concentration in Groundwater')
   })
-  
   ### END tab 3, row 1
   
   ### START tab 3, row 2
-  
   county_chemical_select <- reactive({
     county_chemical_df <- water_county_avg %>%
       filter(chemical == input$chemical_3_2) %>%
@@ -504,8 +544,25 @@ server <- function(input, output) {
       geom_col(aes(x = year, y = avg_measure), fill = "navy") + 
       theme_minimal()
   })
-  
   ### END tab 3, row 2
+  
+  ### START tab 4, row 1
+  soc_select <- reactive({ ### start soc_select
+    soc_df <- county_socio_join %>% 
+      filter(parameter == input$factor_4_1)
+    #select(geometry, tmp = all_of(input$demographics))
+    
+    return(soc_df)
+  }) ### end soc_select
+  
+  output$pop_plot <- renderPlot({ ### start ces_plot
+    ggplot(data = soc_select()) +
+      geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
+      scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
+      theme_void() 
+    
+  }) ### end ces_plot
+  ### END tab 4, row 1
   
   
   

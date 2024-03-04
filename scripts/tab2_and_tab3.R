@@ -17,7 +17,6 @@ ca_counties_sf <- ca_counties_raw_sf %>%
 
 
 # convert water quality to sf 
-
 water_quality_sf <- st_as_sf(x = water_quality, 
                              coords = c('longitude', 'latitude'), 
                              crs = 4326)
@@ -25,7 +24,6 @@ water_quality_sf <- st_as_sf(x = water_quality,
 water_quality_sf <- st_transform(water_quality_sf, 3857)
 
 # combine water quality and county data 
-
 county_water <- st_join(ca_counties_sf, water_quality_sf)
 water_county <- st_join(water_quality_sf, ca_counties_sf)
 
@@ -38,7 +36,6 @@ county_water <- county_water %>%
   complete(county, chemical, year)
 
 # convert depth to sf
-
 depth_df <- depth_df %>%
   janitor::clean_names()
 

@@ -72,7 +72,8 @@ pop_plot <- ggplot(data = county_socio_join) +
 # plot(pop_plot)
 ```
 
-################################### Tab 4 Row 2 - Graphs #######################
+################################### Tab 4 Row 2 - Graphs
+
 ```{r}
 ### bar graph comparing counts by county
 socio_pivot <- socio_county %>% 
@@ -88,10 +89,10 @@ poverty_cardio_plot <- ggplot(data = socio_pivot,
 poverty_cardio_plot
 ```
 
+######################################## Water Quality + CES
 
-######################################## Water Quality + CES ### 
-Groundwater Quality vs Poverty Score
-Questions we want to ask: Is the poverty score a good indicator of water quality? compare using NLS
+Groundwater Quality vs Poverty Score Questions we want to ask: Is the poverty score a good indicator of water quality? compare using NLS
+
 ```{r}
 # # convert water quality to sf 
 # water_quality_sf <- st_as_sf(x = water_quality, 
@@ -124,7 +125,7 @@ Questions we want to ask: Is the poverty score a good indicator of water quality
 # co3_plot
 ```
 
-######################################### ShinyApp ### Attach necessary packages
+######################################### ShinyApp \### Attach necessary packages
 
 ```{r}
 library(shiny)

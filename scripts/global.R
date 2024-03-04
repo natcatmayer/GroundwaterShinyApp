@@ -98,3 +98,17 @@ pop_plot <- ggplot(data = county_socio_join) +
   scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
   theme_void() +
   labs(fill = "Population Density")
+
+### bar graph comparing counts by county
+socio_pivot <- socio_county %>% 
+  pivot_longer('ces':'unemployment', names_to = 'indicator', values_to = 'percentile') %>% 
+  mutate(county = as.factor(county))
+
+### bar graph comparing counts by county
+poverty_cardio_plot <- ggplot(data = socio_pivot, 
+                              aes(x = reorder(county, percentile), y = percentile)) +
+  geom_col(position = 'dodge')  +
+  labs(x = 'County', y = 'Percentile') +
+  theme_minimal()
+
+poverty_cardio_plot

@@ -127,7 +127,7 @@ ui <- fluidPage(
                
                       h4(("Tab 3: Environmental Justice")),
                           p("This analysis shows socioeconomic variables mapped by percentile in each county. Socioeconomic variables 
-                            explore in this analysis include:"),
+                            explored in this analysis include:"),
 
                                 ##### How do I make these bullet points?? #####
                                 p(tags$b("Population Density,

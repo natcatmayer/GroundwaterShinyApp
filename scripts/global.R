@@ -60,7 +60,7 @@ water_county_avg <- county_water %>%
   group_by(county, chemical, year) %>%
   summarise(avg_measure = mean(measurement))
 
-# Socioeconmic data wrangling 
+### Socioeconmic data wrangling 
 socio_by_county <- socioeco_data %>% 
   dplyr::group_by(california_county) %>% 
   summarize(total_pop = sum(total_population, na.rm = TRUE),
@@ -76,14 +76,20 @@ socio_by_county$county <- socio_by_county$california_county
 socio_county <- socio_by_county %>% 
   select(-california_county) %>% 
   select(county, everything()) %>% 
-  mutate(county = str_squish(county))
+  mutate(county = str_squish(county)) %>% 
+  filter(county %in% c('Imperial', 'Kern', 'Los Angeles', 
+                       'Orange', 'Riverside', 'San Bernardino',
+                       'San Diego', 'San Luis Obispo', 'Santa Barbara', 'Ventura'))
 
 ### counties data
 ca_counties_sf2 <- ca_counties_raw_sf %>% 
   janitor::clean_names() %>%
   mutate(land_km2 = aland / 1e6) %>%
   select(county = name, land_km2) %>% 
-  mutate(county = str_squish(county)) 
+  mutate(county = str_squish(county)) %>% 
+  filter(county %in% c('Imperial', 'Kern', 'Los Angeles', 
+                       'Orange', 'Riverside', 'San Bernardino',
+                       'San Diego', 'San Luis Obispo', 'Santa Barbara', 'Ventura')) 
 #ca_counties_sf2 %>% st_crs() ###3857
 
 ### join the two together

@@ -241,16 +241,14 @@ ui <- fluidPage(
                                      'Poverty' = 'poverty', 
                                      'Unemplpoyment' = 'unemployment',
                                      'CES Score' = 'ces')
-                       )
+                       ) ### end radioButtons
                 ), ### end column
                 column(width = 7,
-                       h4('Map of California Counties'),
+                       h4('Map of Southern California Counties'),
                        plotOutput(outputId = 'pop_plot')
                 ) ### end column
               ), ### end fluidRow 4.1
               
-              hr(), ### horizontal rule so the row breaks are easier to see
-              p('talk about how they should look at the map'),
               hr(),
               
               fluidRow( # start fluid row 4.2

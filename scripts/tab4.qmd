@@ -19,7 +19,7 @@ library(dplyr)
 ```{r}
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
 socioeco_data <- read.csv(here('data/socioeco.csv'))
-water_quality <- read_csv(here('data/water_quality.csv'))
+# water_quality <- read_csv(here('data/water_quality.csv'))
 ```
 
 ############################################## CES + County Data
@@ -27,6 +27,7 @@ water_quality <- read_csv(here('data/water_quality.csv'))
 ### Edit the CES data
 
 ```{r}
+# group by county and return the columns listed, averaged
 socio_by_county <- socioeco_data %>% 
   dplyr::group_by(california_county) %>% 
   summarize(ces = mean(ces_4_0_percentile, na.rm = TRUE),
@@ -36,12 +37,17 @@ socio_by_county <- socioeco_data %>%
             poverty = mean(poverty_pctl, na.rm = TRUE),
             unemployment = mean(unemployment_pctl, na.rm = TRUE))
 
+# create a new 'county' column
 socio_by_county$county <- socio_by_county$california_county 
 
+# remove 'california_county' column, put it first, and clean the county names (remove spaces)
 socio_county <- socio_by_county %>% 
   select(-california_county) %>% 
   select(county, everything()) %>% 
-  mutate(county = str_squish(county))
+  mutate(county = str_squish(county)) %>% 
+  filter(county %in% c('Imperial', 'Kern', 'Los Angeles', 
+                                'Orange', 'Riverside', 'San Bernardino',
+                                'San Diego', 'San Luis Obispo', 'Santa Barbara', 'Ventura'))
 ```
 
 ### Create CA County Map and Overlay CES Score Data
@@ -54,7 +60,10 @@ ca_counties_sf <- ca_counties_raw_sf %>%
   janitor::clean_names() %>%
   mutate(land_km2 = aland / 1e6) %>%
   select(county = name, land_km2) %>% 
-  mutate(county = str_squish(county)) 
+  mutate(county = str_squish(county)) %>% 
+  filter(county %in% c('Imperial', 'Kern', 'Los Angeles', 
+                                'Orange', 'Riverside', 'San Bernardino',
+                                'San Diego', 'San Luis Obispo', 'Santa Barbara', 'Ventura'))
 #ca_counties_sf %>% st_crs() ###3857
 
 ### join the two together
@@ -80,11 +89,15 @@ socio_pivot <- socio_county %>%
   pivot_longer('ces':'unemployment', names_to = 'indicator', values_to = 'percentile') %>% 
   mutate(county = as.factor(county))
 
-poverty_cardio_plot <- ggplot(data = socio_pivot, 
-                              aes(x = reorder(county, percentile), y = percentile)) +
-        geom_col(position = 'dodge')  +
-        labs(x = 'County', y = 'Percentile') +
-        theme_minimal()
+poverty_cardio_plot <-  ggplot(data = socio_pivot, 
+                              aes(x = reorder(county, -percentile), y = percentile, fill = percentile)) +
+        geom_col(color = "black") +
+        scale_fill_gradientn(colors = c("lightgray", "orange","red")) + 
+        labs(x = 'County', y = 'Percentile', fill = "Percentile") +
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+              legend.position = 'none') +
+        theme(axis.text = element_text(size = 15))
 
 poverty_cardio_plot
 ```
@@ -144,7 +157,6 @@ ui <- fluidPage(
   titlePanel('California Groundwater'),
   tabsetPanel(
     
-    
     tabPanel( ### start tab 4
       title = 'Environmental Justice',
       
@@ -176,7 +188,7 @@ ui <- fluidPage(
       
       fluidRow( # start fluid row 4.2
         column(
-          width = 3,
+          width = 5,
           h4('Indicator'),
           radioButtons(
             inputId = 'factor_4_2',
@@ -187,20 +199,17 @@ ui <- fluidPage(
                                   'Poverty' = 'poverty', 
                                   'Unemplpoyment' = 'unemployment',
                                   'CES Score' = 'ces')
-          ) ### endradioButtons
-          
-        ),
+          ) ### end radioButtons
+        ), ### end column
         column(
-          width = 9,
+          width = 7,
           h4('Indicators Across Counties'),
           plotOutput(outputId = 'poverty_cardio_plot')
         ) ### end column
       ) ### end fluidRow 4.2
-      
-    ) ### end tab 4 
-  
-  ) ### end tabsetPanel
-) # end fluidPage
+    ) ### end tab 4
+  ) ### end tabset panel
+) ### end fluidPage
 ```
 
 ### Create the server function:
@@ -240,12 +249,11 @@ server <- function(input, output) {
         labs(x = 'County', y = 'Percentile', fill = "Percentile") +
         theme_minimal() +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-              legend.position = 'none')
+              legend.position = 'none') +
+        theme(text = element_text(size = 15))
       
  }) ### end poverty_cardio_plot
-    
 ### END tab 4, row 2
- 
 }
 ```
 

@@ -112,14 +112,12 @@ ui <- fluidPage(
                   width=3,
                 ) ### end column 
               ), ### end fluidRow 3
-              
-              
-              p(em("Developed by Natalie Mayer, Chelsea Sanford, and Madi Calbert"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px,font-size:12px"),
-          
+            
+              p(em("Developed by Natalie Mayer, Chelsea Sanford, and Madi Calbert"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px"),
               
               tags$img(src="water.jpeg", width="100%",height="200px", align = "justify"),
               br(),
-              br()
+              br(),
        
             ), ########################### end tab 1 ##############################
     

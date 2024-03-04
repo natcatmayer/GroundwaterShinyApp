@@ -96,6 +96,19 @@ pop_plot <- ggplot(data = county_socio_join) +
   theme_void() +
   labs(fill = "Population Density")
 
+### bar graph comparing counts by county
+socio_pivot <- socio_county %>% 
+  pivot_longer('ces':'unemployment', names_to = 'indicator', values_to = 'percentile') %>% 
+  mutate(county = as.factor(county))
+
+poverty_cardio_plot <- ggplot(data = socio_pivot, 
+                              aes(x = reorder(county, percentile), y = percentile)) +
+  geom_col(position = 'dodge')  +
+  labs(x = 'County', y = 'Percentile') +
+  theme_minimal()
+
+poverty_cardio_plot
+
 
 ################## Create the user interface: ############################
 ui <- fluidPage(
@@ -424,7 +437,6 @@ ui <- fluidPage(
                              'Education' = 'education', 
                              'Poverty' = 'poverty', 
                              'Unemplpoyment' = 'unemployment',
-                             'Population Density' = 'density', 
                              'CES Score' = 'ces')
                )
         ), ### end column
@@ -441,17 +453,23 @@ ui <- fluidPage(
       fluidRow( # start fluid row 4.2
         column(
           width = 3,
-          h3('Select other variable'),
+          h4('Indicator'),
           radioButtons(
-            inputId = 'demographic',
-            label = 'demographic category',
-            choices = c(4, 6, 8)
+            inputId = 'factor_4_2',
+            label = ' ',
+            choices = c('Low Birth Weight' = 'low_birth_weight', 
+                        'Cardiovascular Disease' = 'cardio_disease', 
+                        'Education' = 'education', 
+                        'Poverty' = 'poverty', 
+                        'Unemplpoyment' = 'unemployment',
+                        'CES Score' = 'ces')
           )
+          
         ),
         column(
           width = 9,
-          h3('Graph here'),
-          #plotOutput('insert_graph'))
+          h4('Indicators Across Counties'),
+          plotOutput(outputId = 'poverty_cardio_plot')
         )
       ) ### end fluidRow 4.2
       
@@ -557,19 +575,39 @@ server <- function(input, output) {
   soc_select <- reactive({ ### start soc_select
     soc_df <- county_socio_join %>% 
       filter(parameter == input$factor_4_1)
-    #select(geometry, tmp = all_of(input$demographics))
-    
     return(soc_df)
   }) ### end soc_select
   
   output$pop_plot <- renderPlot({ ### start ces_plot
     ggplot(data = soc_select()) +
       geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
+      labs(fill = "Percentile") +
       scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
       theme_void() 
     
   }) ### end ces_plot
   ### END tab 4, row 1
+  
+  ### START tab 4, row 2
+  soc_bar <- reactive({ ### start soc_bar
+    soc_df_bar <- socio_pivot %>% 
+      filter(indicator == input$factor_4_2)
+    return(soc_df_bar)
+  }) ### end soc_bar
+  
+  output$poverty_cardio_plot <- renderPlot({ ### start poverty_cardio_plot
+    ggplot(data = soc_bar(), 
+           aes(x = reorder(county, -percentile), y = percentile, fill = percentile)) +
+      geom_col(color = "black") +
+      scale_fill_gradientn(colors = c("lightgray", "orange","red")) + 
+      labs(x = 'County', y = 'Percentile', fill = "Percentile") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+            legend.position = 'none')
+    
+  }) ### end poverty_cardio_plot
+  
+  ### END tab 4, row 2
   
   
   

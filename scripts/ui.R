@@ -7,13 +7,58 @@ ui <- fluidPage(
   tabsetPanel(
     
     tabPanel( ######################## start tab 1 #############################
-              title = 'Home',
+              icon("home"),
               
-              includeMarkdown('home.md'),
+              tags$img(src="clara.jpg", width="100%",height="310px", align = "justify"),
+              p(em("The Santa Clara River, Ventura County. Photo Credit: The Nature Conservancy.")),
+              hr(),
               
-              imageOutput("image1"),
+              # imageOutput("image1"),
+              # p(em("Photo Credit")),
+              # hr(),
+              
+              fluidRow( ### start fluidRow 1
+                column(width=8,
+                       h4(strong("Purpose"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px"),
+                       p("This interactive tool presents data on how groundwater depth and quality
+                              intersects with socioeconomic factors in California counties."), # End paragraph 1 
+                       br(), # Line break
+                       
+                       h4(strong("Background"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px"),
+                       includeMarkdown('background.md'),
+                       br(), # Line break
+                       
+                ), ### end column 
+                
+                column(
+                  tags$img(src="pump.jpeg", width="400px",height="310px", align = "justify"), ## need to get a photo 
+                  br(),
+                  br(), 
+                  p("Talk about groundwater. Credit: California Department of Water Resources.",
+                    style="text-align:justify;color:black, font-size:12px"),
+                  br(),
+                  br(), 
+                  
+                  tags$img(src="santa_clara_river.jpeg", width="400px",height="310px", align = "justify"), ## need to get a photo 
+                  br(),
+                  br(), 
+                  p("Talk about the Santa Clara River and Watershed and how it is a GDE.",
+                    br(),
+                    style="text-align:justify;color:black, font-size:12px"),
+                  width=3,
+                ) ### end column 
+              ), ### end fluidRow 1
+              
+              fluidRow( ### start fluidRow 2
+                
+                
+              ), ### end fluidRow 2
+              
+              tags$img(src="water.jpeg", width="100%",height="200px", align = "justify"),
+              br(),
+              br()
        
-    ), ########################### end tab 1 ##############################
+            ), ########################### end tab 1 ##############################
     
     
     

@@ -18,20 +18,83 @@ ui <- fluidPage(
               # hr(),
               
               fluidRow( ### start fluidRow 1
-                column(width=8,
-                       h4(strong("Purpose"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px"),
-                       p("This interactive tool presents data on how groundwater depth and quality
+                    column(width=8,
+                            h4(strong("Purpose"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px"),
+                            p("This interactive tool presents data on how groundwater depth and quality
                               intersects with socioeconomic factors in California counties."), # End paragraph 1 
+                            br(), # Line break
+                       
+                            h4(strong("Background"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px"),
+                            includeMarkdown('background.md'),
+                            br(), # Line break
+                       
+                          ), ### end column 
+                
+                    column(
+                            tags$img(src="pump.jpeg", width="400px",height="310px", align = "justify"), 
+                            br(),
+                            br(), 
+                            p("Talk about groundwater. Credit: California Department of Water Resources.",
+                            style="text-align:justify;color:black, font-size:12px"),
+                            br(),
+                            br(), 
+                  
+                            tags$img(src="monitor.jpeg", width="400px",height="310px", align = "justify"), 
+                            br(),
+                            br(), 
+                            p("Talk about monitoring. Credit: California Department of Water Resources.",
+                            br(),
+                            style="text-align:justify;color:black, font-size:12px"),
+                            width=3,
+                           ) ### end column 
+                      ), ### end fluidRow 1
+              
+              
+              
+              fluidRow( ### start fluidRow 2
+                  column(width=8, 
+                   tags$img(src="figure.jpeg", width="500px",height="300px", align = "justify"), ## need to get a photo 
+                   br(),
+                  ) ### end column
+              ), ### end fluidRow 2
+              br(),
+              
+              
+              
+              fluidRow( ### start fluidRow 3
+                column(width=8,
+                       h4(strong("Website Content"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px"),
+                            p(" This website is comprised of three main tabs:"),
+                                p(tags$b("Tab 1: Groundwater Levels")), 
+                                p("This analysis explores the currents trends in groundwater depth 
+                                and elevation in all California counties."),
+                                p(tags$b("Tab 2: Groundwater Quality")),
+                                p("This analysis explores chemical pollutants impacting groundwater."),
+                                p(tags$b("Tab 3: Environmental Justice")),
+                                p("This analysis shows socioeconomic variables mapped by percentile in each county. Socioeconomic variables 
+                                explore in this analysis include:"),
+                            br(), # Line break
+                       
+                       h4(strong("Data Summary"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px"),
+                            p("In this analysis, groundwater levels and quality across all 58 California counties are analyzed. 
+                            Our analysis includes measurements from 285,273 wells of groundwater depth from the surface (ft), 
+                            PFOA in (ng/L), PFOS (ng/L), Calcium Carbonate (mg/L), bicarbonate (mg/L), mercury (ug/L), nitrate 
+                            (mg/L), arsenic (ug/L), and lead (ug/L)."),
                        br(), # Line break
                        
-                       h4(strong("Background"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px"),
-                       includeMarkdown('background.md'),
-                       br(), # Line break
-                       
+                       h4(strong("Data Source"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px"),
+                            p("Groundwater depth and water quality data:"),
+                            p("The Groundwater Ambient Monitoring and Assessment (GAMA) Program is California's comprehensive 
+                            groundwater quality monitoring program that was created by the State Water Resources Control Board 
+                            (State Water Board) in 2000. It was later expanded by Assembly Bill 599 - the Groundwater Quality 
+                            Monitoring Act of 2001. AB 599 required the State Water Board, in coordination with an Interagency 
+                            Task Force (ITF) and Public Advisory Committee (PAC) to improve statewide comprehensive groundwater 
+                            monitoring and increase the availability of groundwater quality information to the public."),
+                            br(), # Line break
                 ), ### end column 
                 
                 column(
-                  tags$img(src="pump.jpeg", width="400px",height="310px", align = "justify"), ## need to get a photo 
+                  tags$img(src="pump.jpeg", width="400px",height="310px", align = "justify"), 
                   br(),
                   br(), 
                   p("Talk about groundwater. Credit: California Department of Water Resources.",
@@ -39,20 +102,20 @@ ui <- fluidPage(
                   br(),
                   br(), 
                   
-                  tags$img(src="santa_clara_river.jpeg", width="400px",height="310px", align = "justify"), ## need to get a photo 
+                  
+                  tags$img(src="monitor.jpeg", width="400px",height="310px", align = "justify"), 
                   br(),
                   br(), 
-                  p("Talk about the Santa Clara River and Watershed and how it is a GDE.",
+                  p("Talk about monitoring. Credit: California Department of Water Resources.",
                     br(),
                     style="text-align:justify;color:black, font-size:12px"),
                   width=3,
                 ) ### end column 
-              ), ### end fluidRow 1
+              ), ### end fluidRow 3
               
-              fluidRow( ### start fluidRow 2
-                
-                
-              ), ### end fluidRow 2
+              
+              p(em("Developed by Natalie Mayer, Chelsea Sanford, and Madi Calbert"), style="text-align:justify;color:333333;background-color:#85d6a9;padding:15px;border-radius:10px,font-size:12px"),
+          
               
               tags$img(src="water.jpeg", width="100%",height="200px", align = "justify"),
               br(),

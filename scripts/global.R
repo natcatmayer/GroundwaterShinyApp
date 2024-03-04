@@ -106,9 +106,10 @@ socio_pivot <- socio_county %>%
 
 ### bar graph comparing counts by county
 poverty_cardio_plot <- ggplot(data = socio_pivot, 
-                              aes(x = reorder(county, percentile), y = percentile)) +
-  geom_col(position = 'dodge')  +
-  labs(x = 'County', y = 'Percentile') +
-  theme_minimal()
-
-poverty_cardio_plot
+       aes(x = reorder(county, -percentile), y = percentile, fill = percentile)) +
+  geom_col(color = "black") +
+  scale_fill_gradientn(colors = c("lightgray", "orange","red")) + 
+  labs(x = 'County', y = 'Percentile', fill = "Percentile") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+        legend.position = 'none')

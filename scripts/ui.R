@@ -224,58 +224,67 @@ ui <- fluidPage(
               
     ), ### end tab 3  
     
-    tabPanel( ############################ start tab 4 ######################
-              title = 'Environmental Justice',
-              
-              includeMarkdown('tab4.md'),
-
-              fluidRow( # start fluid row 4.1
-                column(width = 5,
-                       h4('Socioeconomic Indicator'),
-                       radioButtons(
-                         inputId = 'factor_4_1',
-                         label = ' ',
-                         choices = c('Low Birth Weight' = 'low_birth_weight', 
-                                     'Cardiovascular Disease' = 'cardio_disease', 
-                                     'Education' = 'education', 
-                                     'Poverty' = 'poverty', 
-                                     'Unemplpoyment' = 'unemployment',
-                                     'CES Score' = 'ces')
-                       ) ### end radioButtons
-                ), ### end column
-                column(width = 7,
-                       h4('Map of Southern California Counties'),
-                       plotOutput(outputId = 'pop_plot')
-                ) ### end column
-              ), ### end fluidRow 4.1
-              
-              hr(),
-              
-              fluidRow( # start fluid row 4.2
-                column(
-                  width = 3,
-                  h4('Indicator'),
-                  radioButtons(
-                    inputId = 'factor_4_2',
-                    label = ' ',
-                    choices = c('Low Birth Weight' = 'low_birth_weight', 
-                                'Cardiovascular Disease' = 'cardio_disease', 
-                                'Education' = 'education', 
-                                'Poverty' = 'poverty', 
-                                'Unemplpoyment' = 'unemployment',
-                                'CES Score' = 'ces')
-                  ) ### end radioButtons
-                ), ### end column
-                column(
-                  width = 9,
-                  h4('Indicators Across Counties'),
-                  plotOutput(outputId = 'poverty_cardio_plot')
-                ) ### end column
-              ) ### end fluidRow 4.2
-              
-    ), ### end tab 4 
+    tabPanel( ################# start tab 4 ###########################
+      title = 'Environmental Justice',
+      
+      includeMarkdown('tab4.md'),
+      
+      hr(),
+      
+      fluidRow( # start fluid row 4.1
+        column(width = 3,
+               h5('Socioeconomic Indicator'),
+               radioButtons(
+                 inputId = 'factor_4_1',
+                 label = ' ',
+                 choices = c('Low Birth Weight' = 'low_birth_weight', 
+                             'Cardiovascular Disease' = 'cardio_disease', 
+                             'Education' = 'education', 
+                             'Poverty' = 'poverty', 
+                             'Unemplpoyment' = 'unemployment',
+                             'CES Score' = 'ces')
+               ) ### end radioButtons
+        ), ### end column
+        
+        column(width = 5,
+               h5('Map of California Counties'),
+               plotOutput(outputId = 'socio_plot')
+        ), ### end column
+        
+        column(width = 4,
+               h5('Indicators Across Counties'),
+               plotOutput(outputId = 'ces_barplot')
+        ) ### end column
+      ), ### end fluidRow 4.1
+      
+      hr(),
+      
+      fluidRow( # start fluid row 4.2
+        column(
+          width = 4,
+          # h4('Indicator'),
+          # radioButtons(
+          #   inputId = 'factor_4_2',
+          #   label = ' ',
+          #   choices = c('Low Birth Weight' = 'low_birth_weight',
+          #                         'Cardiovascular Disease' = 'cardio_disease',
+          #                         'Education' = 'education',
+          #                         'Poverty' = 'poverty',
+          #                         'Unemplpoyment' = 'unemployment',
+          #                         'CES Score' = 'ces')
+          # ) ### end radioButtons
+        ), ### end column
+        
+        column(
+          width = 7,
+          #h4('Indicators Across Counties'),
+          #plotOutput(outputId = 'poverty_cardio_plot')
+        ) ### end column
+      
+        ) ### end fluidRow 4.2
+    ), ############################# end tab 4 ##########################
     
-    tabPanel( ### start tab 5
+    tabPanel( ##################### start tab 5 ##########################
       title = 'Groundwater Dependent Ecosystems',
       
       p(' If we have time :-) ')

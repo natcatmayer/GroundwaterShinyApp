@@ -14,10 +14,9 @@ server <- function(input, output, session) {
   
   #### END tab 1 #####
   
-  
   ### START tab 2, row 1  
   gw_select <- reactive({ ### start gw_select
-    gw_county_df <- county_gw_avg %>%
+    gw_county_df <- depth_avg %>%
       filter(year %in% input$year_2_1)
     
     return(gw_county_df)
@@ -25,28 +24,46 @@ server <- function(input, output, session) {
   
   output$gw_plot <- renderPlot({ ### start gw_plot
     ggplot(data = gw_select()) + 
-      geom_sf(aes(fill = average_depth), color = "white", size = 0.1) + 
-      scale_fill_gradientn(colors = c("lightgray", "yellow", "orange", "red")) + 
+      geom_sf(data = county_shapes, color = "black", size = 0.5, fill = "white") +
+      geom_sf(aes(fill = average_depth), color = "black", size = 0.5) + 
+      scale_fill_continuous(low = "lightblue", high = "navy", guide = "colorbar", na.value = "white") + 
+      geom_sf_label(aes(label = name)) +
       theme_void() + 
-      labs(fill = 'Groundwater Depth')
+      labs(fill = 'Groundwater Depth (ft)') +
+      theme(axis.text.x = element_blank(), 
+            axis.text.y = element_blank())
   }) ### end gw_plot
   ### END tab 2, row 1 
   
   ### START tab 2, row 2
+  
   gw_select_1 <- reactive({
-    gw_county_df_1 <- county_gw_avg %>%
-      filter(county %in% input$county_2_2)
+    gw_county_df_1 <- depth_avg %>%
+      filter(name %in% input$county_2_2)
     
-    return(gw_county_df_1)
   })  ### end gw_select_1
   
+  theme_groundwater <- function(base_size = 11, base_family = "") {
+    theme_bw() %+replace%
+      theme(
+        panel.background = element_rect(fill = "lightblue")
+      )
+  }
+  
+  
   output$gw_plot_2 <- renderPlot({
-    ggplot(data = gw_select_1()) + 
-      geom_col(aes(x = year, y = average_depth), fill = "red3") + 
-      labs(x = "Year", 
+    ggplot(data = gw_select_1(), aes(x = year, y = average_depth)) + 
+      geom_col(fill = "tan3") + 
+      scale_y_continuous(trans = "reverse", expand = c(0,0), limits = c(200,0)) +
+      labs(x = " ", 
            y = "Average Groundwater Depth") +
-      theme_minimal()
+      theme_groundwater() +
+      theme(axis.text.x = element_text(angle = 45, size = 12, vjust = -0.1), 
+            axis.text.y = element_text(size = 12), 
+            axis.title=element_text(size=14,face="bold")) +
+      scale_x_discrete(breaks=seq(1985, 2023, 2))
   })
+  
   ### END tab 2, row 2
   
   ### START tab 3, row 1

@@ -132,48 +132,48 @@ ui <- fluidPage(
     
     
     
-    tabPanel( ####################### start tab 2 ###############################
-              title = 'Groundwater Levels',
-              
-              fluidRow( # start fluid row 2.1
-                column(width = 3,
-                       
-                       
-                       sliderInput("year_2_1", label = h3("Select Year"), min = 2022, 
-                                   max = 2024, value = 2024, sep = "")
-                       
-                       
-                ), ### end column
-                column(width = 9,
-                       h3('Map Here'),
-                       plotOutput(outputId = 'gw_plot')
-                )
-              ), ### end fluidRow 2.1
-              
-              hr(), ### horizontal rule so the row breaks are easier to see
-              p('talk about how they should look at the map'),
-              hr(),
-              
-              fluidRow( # start fluid row 2.2
-                column(
-                  width = 3,
-                  
-                  
-                  selectInput("county_2_2", label = h3("Select County"),
-                              choices = unique(county_gw_avg$county),
-                              selected = 1)
-                  
-                  
-                ), # end column
-                
-                column(
-                  width = 9,
-                  h3('Graph here'),
-                  plotOutput(outputId = 'gw_plot_2'))
-                
-              ) ### end fluidRow 2.2
-              
-              
+    tabPanel( ### start tab 2
+      title = 'Groundwater Levels',
+      
+      fluidRow( # start fluid row 2.1
+        column(width = 3,
+               
+               
+               sliderInput("year_2_1", label = h3("Select Year"), min = 1985, 
+                           max = 2023, value = 2023, sep = "")
+               
+               
+        ), ### end column
+        column(width = 9,
+               h3('Southern California Groundwater Depth by County'),
+               plotOutput(outputId = 'gw_plot')
+        )
+      ), ### end fluidRow 2.1
+      
+      hr(), ### horizontal rule so the row breaks are easier to see
+      p('talk about how they should look at the map'),
+      hr(),
+      
+      fluidRow( # start fluid row 2.2
+        column(
+          width = 3,
+          
+          
+          selectInput("county_2_2", label = h3("Select County"),
+                      choices = unique(depth_avg$name),
+                      selected = 1)
+          
+          
+        ), # end column
+        
+        column(
+          width = 9,
+          h3('Southern California Groundwater Depth by County'),
+          plotOutput(outputId = 'gw_plot_2'))
+        
+      ) ### end fluidRow 2.2
+      
+      
     ), ### end tab 2
     
     

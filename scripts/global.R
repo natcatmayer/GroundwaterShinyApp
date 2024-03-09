@@ -122,7 +122,7 @@ ces_barplot <-  ggplot(data = county_socio_join,
 ## tab 2 data load 
 
 
-#quality_avg <- read_sf(dsn = here('data', 'avg_so_cal_water_quality.gpkg'))
+quality_avg <- read_sf(dsn = here('data', 'avg_so_cal_water_quality.gpkg'))
 depth_avg <- read_sf(dsn = here('data', 'depth_average.gpkg'))
 county_shapes <- read_sf(dsn = here('data', 'so_cal_county_shape.gpkg'))
 epa_levels <- read_csv(here('data', 'epa_levels.csv')) %>% janitor::clean_names()

@@ -113,10 +113,8 @@ ui <- fluidPage(
                        tags$img(src="swrcb_logo.png", width="300px",height="100px", align = "justify"), 
                        br(),
                        br(),
-                       
                        br(),
-                       br(), 
-                       tags$img(src="oehha_logo.png", width="300px",height="100px", align = "justify"), 
+                       tags$img(src="calenviroscreenlogo.png", width="400px",height="150px", align = "justify"), 
                        br(),
                        width=4,
                 ) ### end column
@@ -229,45 +227,48 @@ ui <- fluidPage(
                   plotOutput('chemical_plot'))
               ) ### end fluidRow 3.2
               
-              
-              
-              
-    ), ### end tab 3  
+    ), ########################## end tab 3  ###########################
+    
+    
+    
     
     tabPanel( ################# start tab 4 ###########################
       title = 'Environmental Justice',
       
+      tags$img(src="water.jpeg", width="100%",height="200px", align = "justify"),
+      br(),
+      br(),
       
       fluidRow( ### start fluidRow 1
         column(width=8,
-               h4(strong("Purpose"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
-               p("This interactive tool presents data on how groundwater depth and groundwater quality
-                              intersects with socioeconomic factors in California counties."), # End paragraph 1 
-               br(), # Line break
-               
-               h4(strong("Background"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
-               includeMarkdown('background.md')
-               
+               h4(strong("Description"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+               includeMarkdown('tab4.md')
         ), ### end column 
         
         
         column(style="text-align:justify;color:#003366;background-color:#6699CC;padding:15px;border-radius:10px",
                br(),
-               tags$img(src="pump.jpeg", width="455px",height="320px", align = "justify"), 
+               tags$img(src="clean_water.jpeg", width="455px",height="320px", align = "justify"), 
                br(),
-               p(em("Credit: California Department of Water Resources.", style="text-align:justify;font-size:12px")),
+               p(em("Credit: Centers for Disease Control and Prevention.", style="text-align:justify;font-size:12px")),
                br(),
                
-               tags$img(src="monitor.jpeg", width="455px",height="320px", align = "justify"), 
                br(),
-               p(em("Credit: California Department of Water Resources.", style="text-align:justify;font-size:12px")),
+               tags$img(src="dirty_groundwater.jpeg", width="455px",height="320px", align = "justify"), 
+               br(),
+               p(em("Credit: All American Environmental.", style="text-align:justify;font-size:12px")),
+               br(),
+               
+               tags$img(src="contaminants_fig.jpeg", width="455px",height="320px", align = "justify"), 
+               br(),
+               p(em("Credit: FilterWater.com.", style="text-align:justify;font-size:12px")),
                width=4,
         ) ### end column 
       ), ### end fluidRow 1
       hr(),
       
       
-      includeMarkdown('tab4.md'),
+      
       
       hr(),
       

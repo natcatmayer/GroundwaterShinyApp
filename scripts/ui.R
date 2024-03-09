@@ -13,10 +13,6 @@ ui <- fluidPage(
               p(em("The Santa Clara River, Ventura County. Photo Credit: The Nature Conservancy.", style = "font-size:12px")),
               hr(),
               
-              # imageOutput("image1"),
-              # p(em("Photo Credit")),
-              # hr(),
-              
               fluidRow( ### start fluidRow 1
                     column(width=8,
                             h4(strong("Purpose"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
@@ -132,26 +128,40 @@ ui <- fluidPage(
     
     
     
-    tabPanel( ### start tab 2
+    tabPanel( ########################## start tab 2 ################################
       title = 'Groundwater Levels',
       
+      tags$img(src="casitas.png", width="100%",height="300px", align = "justify"),
+      p(em("Lake Casitas in Ventura County. Photo Credit: Casitas Municipal Water District", style="text-align:justify;font-size:12px")),
+      hr(),
+      
       fluidRow( # start fluid row 2.1
-        column(width = 3,
+        
+        column(width = 8,
+               h3('Southern California Groundwater Depth by County'),
+               plotOutput(outputId = 'gw_plot'),
                
                
                sliderInput("year_2_1", label = h3("Select Year"), min = 1985, 
                            max = 2023, value = 2023, sep = "")
+        ),
+        
+        column(style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px",
+               includeMarkdown('tab_2.md'),
+               tags$img(src="aqueduct.jpeg", width="455px",height="250px", align = "justify"),
+               p(em("California Aqueduct. Photo Credit: Public Policy Institute of California.", style="text-align:justify;font-size:12px")),
+               width=4,
                
-               
-        ), ### end column
-        column(width = 9,
-               h3('Southern California Groundwater Depth by County'),
-               plotOutput(outputId = 'gw_plot')
-        )
+        ) ### end column 
       ), ### end fluidRow 2.1
       
       hr(), ### horizontal rule so the row breaks are easier to see
-      p('talk about how they should look at the map'),
+        p('In a typical year, groundwater makes up about 40% of California’s total water supply. 
+        In a drought year, that number can exceed 60%. Groundwater is an essential resource in shielding 
+        Californians from the impacts of severe drought and human-caused climate change. Unfortunately, over-extracting groundwater has its consequences. According to the California Sustainable 
+        Groundwater Management Act, which passed in 2014, the undesirable results of lowering groundwater levels 
+        include reduction of storage, seawater intrusion, degraded water quality, land subsidence, and surface water 
+        depletion.', style="text-align:justify;color:#FFFFFF;background-color:#6699CC;padding:15px;border-radius:10px"),
       hr(),
       
       fluidRow( # start fluid row 2.2
@@ -171,10 +181,16 @@ ui <- fluidPage(
           h3('Southern California Groundwater Depth by County'),
           plotOutput(outputId = 'gw_plot_2'))
         
-      ) ### end fluidRow 2.2
+      ), ### end fluidRow 2.2
       
+      br(),
+      p(em("Developed by Natalie Mayer, Chelsea Sanford, and Madi Calbert"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
       
-    ), ### end tab 2
+      tags$img(src="water.jpeg", width="100%",height="200px", align = "justify"),
+      br(),
+      br(),
+      
+    ), ############################## end tab 2 #############################
     
     
     tabPanel( ###################### start tab 3 ###########################

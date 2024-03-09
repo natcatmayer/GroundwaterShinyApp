@@ -193,57 +193,65 @@ ui <- fluidPage(
     ), ############################## end tab 2 #############################
     
     
-    tabPanel( ###################### start tab 3 ###########################
-              title = 'Groundwater Quality',
-              
-              
-              fluidRow( # start fluid row 3.1
-                column(width = 3,
-                       h3('Select Water Quality Indicator'),
-                       
-                       radioButtons(
-                         inputId = 'chemical_3_1',
-                         label = 'chemical',
-                         choices = unique(water_quality_sf$chemical)),
-                       
-                       sliderInput("year_3_1", label = h3("Select Year"), 
-                                   min = 1990, max = 2024, value = 2024, sep = "")
-                       
-                ), ### end column
-                
-                column(width = 9,
-                       plotOutput('chemical_map')
-                ) ### end column
-                
-              ), ### end fluidRow 3.1
-              
-              hr(), ### horizontal rule so the row breaks are easier to see
-              p('talk about how they should look at the map'),
-              hr(),
-              
-              fluidRow( # start fluid row 3.2
-                column(
-                  width = 3,
-                  
-                  selectInput("county_3_2", label = h3("Select County"),
-                              choices = unique(water_county$county),
-                              selected = 1),
-                  
-                  
-                  radioButtons(
-                    inputId = 'chemical_3_2',
-                    label = 'chemical',
-                    choices = unique(water_county$chemical))
-                  
-                ), # end column
-                
-                column(
-                  width = 9,
-                  h3('Graph here'),
-                  plotOutput('chemical_plot'))
-              ) ### end fluidRow 3.2
-              
-    ), ########################## end tab 3  ###########################
+    tabPanel( ### start tab 3
+      title = 'Groundwater Quality',
+      
+      
+      fluidRow( # start fluid row 3.1
+        column(width = 3,
+               
+               radioButtons(
+                 inputId = 'chemical_3_1',
+                 label = h3('Select Chemical'),
+                 choices = c("PFOS (ng/L)" = "Perfluorooctane sulfonate (PFOS)", "PFOA (ng/L)" = "Perfluorooctanoic acid (PFOA)", "Alkalinity as CaCO3 (mg/L)" = "Alkalinity as CaCO3", "Boron (mg/L)" = "Boron", "Chloride (mg/L)" = "Chloride")),
+               
+               radioButtons(
+                 inputId = 'year_3_1', 
+                 label = h3("Select Year"), 
+                 choices = unique(quality_avg$year) %>% sort(),
+                 selected = 1)
+               
+        ), ### end column
+        
+        column(width = 9,
+               h3('Southern California Groundwater Quality by County'),
+               plotOutput('chemical_map')
+        ) ### end column
+        
+      ), ### end fluidRow 3.1
+      
+      hr(), ### horizontal rule so the row breaks are easier to see
+      p('talk about how they should look at the map'),
+      hr(),
+      
+      fluidRow( # start fluid row 3.2
+        column(
+          width = 3,
+          
+          selectInput("county_3_2", label = h3("Select County"),
+                      choices = unique(quality_avg$name),
+                      selected = 1),
+          
+          checkboxGroupInput(
+            inputId = 'chemical_3_2',
+            label = h3('Select Chemical'),
+            choices = c("PFOS (ng/L)" = "Perfluorooctane sulfonate (PFOS)", "PFOA (ng/L)" = "Perfluorooctanoic acid (PFOA)", "Alkalinity as CaCO3 (mg/L)" = "Alkalinity as CaCO3", "Boron (mg/L)" = "Boron", "Chloride (mg/L)" = "Chloride")),
+          
+          
+          hr(),
+          fluidRow(column(3, verbatimTextOutput("value")))
+          
+        ), # end column
+        
+        column(
+          width = 9,
+          h3('Southern California Groundwater Quality by County'),
+          plotOutput('chemical_plot'))
+      ) ### end fluidRow 3.2
+      
+      
+    ), ### end tab 3  
+    
     
     
     

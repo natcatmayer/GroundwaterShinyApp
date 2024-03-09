@@ -11,7 +11,6 @@ library(shinydashboard)
 
 ### Data
 
-
 water_quality <- read_csv(here('data', 'water_quality.csv'))
 depth_df <- read_csv(here('data', 'groundwater_depth.csv'))
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))

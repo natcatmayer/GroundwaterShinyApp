@@ -67,8 +67,21 @@ server <- function(input, output, session) {
   ### END tab 2, row 2
   
   ### START tab 3, row 1
+  
+  observeEvent(input$chemical_3_1, {
+    relevant_years <- quality_avg %>% 
+      filter(chemical == input$chemical_3_1) 
+    
+    year_vec <- relevant_years$year %>% sort() %>% unique()
+    
+    updateRadioButtons(
+      inputId = 'year_3_1',
+      choices = year_vec
+    )
+  })
+  
   county_chemical_select_1 <- reactive({
-    county_chemical_df_1 <- water_county_avg %>%
+    county_chemical_df_1 <- quality_avg %>%
       filter(chemical == input$chemical_3_1) %>%
       filter(year %in% input$year_3_1)
     
@@ -77,27 +90,55 @@ server <- function(input, output, session) {
   
   output$chemical_map <- renderPlot({
     ggplot(data = county_chemical_select_1()) + 
-      geom_sf(aes(fill = avg_measure), color = "lightgray", size = 0.1) + 
-      scale_fill_continuous(low = "lightblue", high = "navy", guide = "colorbar", na.value = "lightgray") + 
+      geom_sf(data = county_shapes, color = "black", size = 0.5, fill = "white") +
+      geom_sf(aes(fill = avg_measure), color = "black", size = 0.5) + 
+      geom_sf_label(aes(label = name)) +
+      scale_fill_continuous(low = "lightblue", high = "tan4", guide = "colorbar", na.value = "white") + 
+      labs(fill = 'Groundwater Concentration') + 
       theme_void() + 
-      labs(fill = 'Chemical Concentration in Groundwater')
+      theme(axis.text.x = element_blank(), 
+            axis.text.y = element_blank())
   })
+  
   ### END tab 3, row 1
   
   ### START tab 3, row 2
+  
   county_chemical_select <- reactive({
-    county_chemical_df <- water_county_avg %>%
-      filter(chemical == input$chemical_3_2) %>%
-      filter(county == input$county_3_2)
+    county_chemical_df <- quality_avg %>%
+      filter(chemical %in% input$chemical_3_2) %>%
+      filter(name == input$county_3_2)
     
     return(county_chemical_df)
   }) ### end county chemical select 
   
+  color_vec <- c("Perfluorooctane sulfonate (PFOS)" = "green4", 
+                 "Perfluorooctanoic acid (PFOA)" = "pink2", 
+                 "Alkalinity as CaCO3" = "lightblue", 
+                 "Boron" = "steelblue3", "Chloride" = "lightgreen" )
+  
+  epa_level_select <- reactive({
+    epa_level_df <- epa_levels %>%
+      filter(chemical %in% input$chemical_3_2)
+    
+    print(epa_level_df)
+    return(epa_level_df)
+  })
+  
   output$chemical_plot <- renderPlot({
     ggplot(data = county_chemical_select()) + 
-      geom_col(aes(x = year, y = avg_measure), fill = "navy") + 
-      theme_minimal()
+      geom_col(aes(x = year, y = avg_measure, fill = chemical)) +
+      geom_hline(data = epa_level_select(), aes(yintercept = level, linetype = chemical, color = chemical), size = 1) +
+      scale_color_manual(values = color_vec) +
+      scale_fill_manual(values = color_vec) +
+      #scale_fill_brewer(palette = 'Paired') +
+      theme_minimal() + 
+      labs(x = "", y = "Average Concentration", fill = "Chemical") +
+      theme(axis.text.x = element_text(size = 12), 
+            axis.text.y = element_text(size = 12), 
+            axis.title = element_text(size = 14, face = "bold"))
   })
+  
   ### END tab 3, row 2
   
   ### START tab 4, row 1

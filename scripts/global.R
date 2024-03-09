@@ -11,7 +11,6 @@ library(shinydashboard)
 
 ### Data
 
-
 water_quality <- read_csv(here('data', 'water_quality.csv'))
 depth_df <- read_csv(here('data', 'groundwater_depth.csv'))
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
@@ -60,7 +59,7 @@ water_county_avg <- county_water %>%
   group_by(county, chemical, year) %>%
   summarise(avg_measure = mean(measurement))
 
-# Socioeconmic data wrangling 
+### Socioeconmic data wrangling 
 socio_by_county <- socioeco_data %>% 
   dplyr::group_by(california_county) %>% 
   summarize(total_pop = sum(total_population, na.rm = TRUE),
@@ -76,39 +75,46 @@ socio_by_county$county <- socio_by_county$california_county
 socio_county <- socio_by_county %>% 
   select(-california_county) %>% 
   select(county, everything()) %>% 
-  mutate(county = str_squish(county))
+  mutate(county = str_squish(county)) %>% 
+  filter(county %in% c('Imperial', 'Kern', 'Los Angeles', 
+                       'Orange', 'Riverside', 'San Bernardino',
+                       'San Diego', 'San Luis Obispo', 'Santa Barbara', 'Ventura'))
 
 ### counties data
-ca_counties_sf2 <- ca_counties_raw_sf %>% 
+ca_counties_sf <- ca_counties_raw_sf %>% 
   janitor::clean_names() %>%
   mutate(land_km2 = aland / 1e6) %>%
   select(county = name, land_km2) %>% 
-  mutate(county = str_squish(county)) 
-#ca_counties_sf2 %>% st_crs() ###3857
+  mutate(county = str_squish(county)) %>% 
+  filter(county %in% c('Imperial', 'Kern', 'Los Angeles', 
+                       'Orange', 'Riverside', 'San Bernardino',
+                       'San Diego', 'San Luis Obispo', 'Santa Barbara', 'Ventura'))
+# ca_counties_sf %>% st_crs() ###3857
 
 ### join the two together
-county_socio_join <- merge(x = ca_counties_sf2, y = socio_county, by = "county", all.x = TRUE) %>% 
-  mutate(density = total_pop/land_km2) %>%
-  select('county','density', everything(), -'total_pop', -'land_km2') %>%
-  pivot_longer('density':'unemployment', names_to = 'parameter', values_to = 'percentile')
+county_socio_join <- merge(x = ca_counties_sf, 
+                           y = socio_county, by = "county", all.x = TRUE) %>% 
+  select('county', everything(), -'land_km2') %>%
+  pivot_longer('ces':'unemployment', names_to = 'parameter', values_to = 'percentile') %>% 
+  mutate(county = as.factor(county))
 
 ### ggplot
-pop_plot <- ggplot(data = county_socio_join) +
+socio_plot <- ggplot(data = county_socio_join) +
   geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
   scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
   theme_void() +
-  labs(fill = "Population Density")
+  labs(fill = "Population Density") +
+  theme(legend.position = 'none')
 
 ### bar graph comparing counts by county
-socio_pivot <- socio_county %>% 
-  pivot_longer('ces':'unemployment', names_to = 'indicator', values_to = 'percentile') %>% 
-  mutate(county = as.factor(county))
-
-### bar graph comparing counts by county
-poverty_cardio_plot <- ggplot(data = socio_pivot, 
-                              aes(x = reorder(county, percentile), y = percentile)) +
-  geom_col(position = 'dodge')  +
-  labs(x = 'County', y = 'Percentile') +
-  theme_minimal()
-
-poverty_cardio_plot
+ces_barplot <-  ggplot(data = county_socio_join, 
+                       aes(x = reorder(county, -percentile), 
+                           y = percentile, 
+                           fill = percentile)) +
+  geom_col(color = "black") +
+  scale_fill_gradientn(colors = c("lightgray", "orange","red")) + 
+  labs(x = 'County', y = 'Percentile', fill = "Percentile") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+        legend.position = 'none') +
+  theme(axis.text = element_text(size = 15))

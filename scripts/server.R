@@ -90,36 +90,29 @@ server <- function(input, output, session) {
     return(soc_df)
   }) ### end soc_select
   
-  output$pop_plot <- renderPlot({ ### start ces_plot
+  output$socio_plot <- renderPlot({ ### start ces_plot
     ggplot(data = soc_select()) +
       geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
       labs(fill = "Percentile") +
       scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
-      theme_void() 
-    
+      theme_void() +
+      theme(legend.position = 'none')
   }) ### end ces_plot
-  ### END tab 4, row 1
   
-  ### START tab 4, row 2
-  soc_bar <- reactive({ ### start soc_bar
-    soc_df_bar <- socio_pivot %>% 
-      filter(indicator == input$factor_4_2)
-    return(soc_df_bar)
-  }) ### end soc_bar
-  
-  output$poverty_cardio_plot <- renderPlot({ ### start poverty_cardio_plot
-    ggplot(data = soc_bar(), 
-           aes(x = reorder(county, -percentile), y = percentile, fill = percentile)) +
+  output$ces_barplot <- renderPlot({ ### start ces_barplot
+    ggplot(data = soc_select(), 
+           aes(x = reorder(county, -percentile), 
+               y = percentile, fill = percentile)) +
       geom_col(color = "black") +
       scale_fill_gradientn(colors = c("lightgray", "orange","red")) + 
       labs(x = 'County', y = 'Percentile', fill = "Percentile") +
       theme_minimal() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-            legend.position = 'none')
-    
-  }) ### end poverty_cardio_plot
+            legend.position = 'none') +
+      theme(text = element_text(size = 15))
+  }) ### end ces_barplot
   
-  ### END tab 4, row 2
+  ### END tab 4, row 1
   
   
   

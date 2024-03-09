@@ -1,19 +1,133 @@
 
 ################## Create the user interface: ############################
 ui <- fluidPage(
-  theme = bs_theme(bootswatch = 'minty'),
+  theme = bs_theme(bootswatch = 'cerulean'),
   
   titlePanel('California Groundwater'),
   tabsetPanel(
     
     tabPanel( ######################## start tab 1 #############################
-              title = 'Home',
+              icon("home"),
               
-              includeMarkdown('home.md'),
+              tags$img(src="clara.jpg", width="100%",height="360px", align = "justify"),
+              p(em("The Santa Clara River, Ventura County. Photo Credit: The Nature Conservancy.", style = "font-size:12px")),
+              hr(),
               
-              imageOutput("image1"),
+              # imageOutput("image1"),
+              # p(em("Photo Credit")),
+              # hr(),
+              
+              fluidRow( ### start fluidRow 1
+                    column(width=8,
+                            h4(strong("Purpose"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+                            p("This interactive tool presents data on how groundwater depth and groundwater quality
+                              intersects with socioeconomic factors in California counties."), # End paragraph 1 
+                            br(), # Line break
+                       
+                            h4(strong("Background"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+                            includeMarkdown('background.md')
+                       
+                          ), ### end column 
+                  
+                
+                    column(style="text-align:justify;color:#003366;background-color:#6699CC;padding:15px;border-radius:10px",
+                             br(),
+                            tags$img(src="pump.jpeg", width="455px",height="320px", align = "justify"), 
+                            br(),
+                            p(em("Credit: California Department of Water Resources.", style="text-align:justify;font-size:12px")),
+                            br(),
+                  
+                            tags$img(src="monitor.jpeg", width="455px",height="320px", align = "justify"), 
+                            br(),
+                            p(em("Credit: California Department of Water Resources.", style="text-align:justify;font-size:12px")),
+                            width=4,
+                           ) ### end column 
+                      ), ### end fluidRow 1
+              hr(),
+              
+              
+              
+              fluidRow( ### start fluidRow 2
+                
+                column(width=4, 
+                         tags$img(src="simple_fig.jpeg", width="350px",height="300px", align = "justify"), 
+                         p(em("Figure 1: Groundwater and Water Table diagram", style="text-align:justify;font-size:12px")),
+                         p(em("Photo Credit: Cornell University Northeast Regional Climate Center", style="text-align:justify;font-size:12px")),
+                  ), ### end column
+                  
+                  column(width=4, 
+                         tags$img(src="hydro_cycle.jpeg", width="500px",height="300px", align = "justify"),  
+                         p(em("Figure 2: The Hydrologic Cycle", style="text-align:justify;font-size:12px")), 
+                         p(em("Photo Credit: Lumen Learning - Hydrology Module", style="text-align:justify;font-size:12px"))
+                  ) ### end column
+              ), ### end fluidRow 2
+              hr(),
+              
+              
+              
+              fluidRow( ### start fluidRow 3
+                column(width=8,
+                       h4(strong("Website Content"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+                            p(" This website is comprised of three main tabs:"),
+                                p(tags$b("Tab 1 - Groundwater Levels")), 
+                                p("This analysis explores the currents trends in groundwater depth 
+                                and elevation in all California counties."),
+                                p(tags$b("Tab 2 - Groundwater Quality")),
+                                p("This analysis explores chemical pollutants impacting groundwater."),
+                                p(tags$b("Tab 3 - Environmental Justice")),
+                                p("This analysis shows socioeconomic variables mapped by percentile in each county. Socioeconomic variables 
+                                explore in this analysis include:"),
+                            br(), # Line break
+                       
+                       h4(strong("Data Source"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+                            p("In this analysis, groundwater levels and quality across all 58 California counties are analyzed. 
+                            Our analysis includes measurements from 285,273 wells of groundwater depth from the surface (ft), 
+                            PFOA in (ng/L), PFOS (ng/L), Calcium Carbonate (mg/L), bicarbonate (mg/L), mercury (ug/L), nitrate 
+                            (mg/L), arsenic (ug/L), and lead (ug/L)."),     
+                       
+                            p(strong("Groundwater depth and water quality data:")),
+                            p("The Groundwater Ambient Monitoring and Assessment (GAMA) Program is California's comprehensive 
+                            groundwater quality monitoring program that was created by the State Water Resources Control Board 
+                            (State Water Board) in 2000. It was later expanded by Assembly Bill 599 - the Groundwater Quality 
+                            Monitoring Act of 2001. AB 599 required the State Water Board, in coordination with an Interagency 
+                            Task Force (ITF) and Public Advisory Committee (PAC) to improve statewide comprehensive groundwater 
+                            monitoring and increase the availability of groundwater quality information to the public."),
+                       
+                       
+                            p(strong("Socioeconomic Data:")),
+                            p("CalEnviroScreen is a screening methodology that can be used to help identify California communities 
+                              that are disproportionately burdened by multiple sources of pollution. It was produced in response to 
+                              Senate Bill (SB) 535 (De León, Chapter 830, Statutes of 2012), which established initial requirements 
+                              for minimum funding levels to “Disadvantaged Communities” (DACs). The legislation also gives CalEPA the 
+                              responsibility for identifying those communities, stating that CalEPA’s designation of disadvantaged 
+                              communities must be based on “geographic, socioeconomic, public health, and environmental hazard criteria”.")
+                ), ### end column 
+                
+                column(style="text-align:justify;color:#003366;background-color:#6699CC;padding:15px;border-radius:10px",
+                       br(), 
+                       tags$img(src="GWBasins.JPG", width="455px",height="470px", align = "justify"), 
+                       br(),
+                       p(em("Map of California Groundwater Basins. Credit: California Department of Water Resources.", style="text-align:justify;font-size:12px")),
+                       br(), 
+                       
+                       tags$img(src="swrcb_logo.png", width="300px",height="100px", align = "justify"), 
+                       br(),
+                       br(),
+                       br(),
+                       tags$img(src="calenviroscreenlogo.png", width="400px",height="150px", align = "justify"), 
+                       br(),
+                       width=4,
+                ) ### end column
+              ), ### end fluidRow 3
+            
+              br(),
+              p(em("Developed by Natalie Mayer, Chelsea Sanford, and Madi Calbert"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+              
+              tags$img(src="water.jpeg", width="100%",height="200px", align = "justify"),
+              br(),
+              br(),
        
-    ), ########################### end tab 1 ##############################
+            ), ########################### end tab 1 ##############################
     
     
     
@@ -113,76 +227,105 @@ ui <- fluidPage(
                   plotOutput('chemical_plot'))
               ) ### end fluidRow 3.2
               
-              
-              
-              
-    ), ### end tab 3  
+    ), ########################## end tab 3  ###########################
     
-    tabPanel( ############################ start tab 4 ######################
-              title = 'Environmental Justice',
-              
-              h4('Description:'), 
-              p('This tab shows socioeconomic and health indicators mapped by percentile in each county from the CalEnviroScreen data and has been gathered between 2013-2019. An indicator measures environmental conditions as well as health and vulnerability factors. The CalEnviroScreen indicators fall into four categories: exposure, environmental, sensitive population, and socioeconomic. Here, we have selected relevant sensitive population and socioeconomic indicators, which may be correlated with groundwater quality.'),
-              HTML("<ul>
-              <li><b>Low Birth Weight: </b>Low birth weight is characterized by infants who weigh less than about five and a half pounds (2500 grams) at birth. Many factors, including poor nutrition, lack of prenatal care, stress, and smoking by the mother, can increase the risk of having a low birth-weight baby. Many factors can increase the risk of having a low birth-weight baby, including mothers who experience poverty, mothers who live in neighborhoods with high rates of violence or experience other stress, who do not have access to healthy foods, regular medical care, and prenatal care, and mothers who smoke. Exposure to pollution from traffic, industry, or agriculture also increases incidences of low-weight births. </li>
-              <li><b>Cardiovascular Disease: </b>Cardiovascular disease is a condition in which blood vessels are blocked or narrowed and this can cause heart attacks. There are many risk factors for developing cardiovascular disease including diet, lack of exercise, smoking, and exposure to air pollution. People with heart disease may react differently to pollution than those without.</li>
-              <li><b>Education:</b>Education refers to the highest level of education that an individual has attained. This is an important indicator because higher education correlates with higher income and therefore higher health standards. People with higher education tend to live longer, live in less polluted areas, and therefore experience fewer pollution-related health issues.  In California, 19% of adults over 25 do not have a high school degree, compared to 14% in the United States.</li>
-              <li><b>Poverty:</b>The poverty income level is set by the US Census Bureau every year. When household income falls below that level based on the size of a household and the ages of the individuals, those individuals are considered in poverty. This indicator is included because people who experience poverty have higher exposure to pollution and therefore have higher incidences of environmental-related health issues. These individuals also lack access to regular health care, nutrient-rich foods, and often do not have healthy living and working environments. Stress caused by poverty can also lower the immune system and increase health issues from exposure to pollution.</li>
-              <li><b>Unemployment:</b>Unemployment is considered anyone who is 16 years or older who is not working, but is able to work. This does not include students, active duty military, retired people, or people who have stopped looking for work. This is an important indicator because people who are not employed may not have health insurance or medical care, and that can lead to health issues, which inturn makes it more difficult to find work. Stress from long-term unemployment can lead to chronic illnesses, such as heart disease, and can shorten a person’s life.</li>
-              <li><b>CES Score: </b>The CES Score is an overall score that includes all 21 indicators. To read more about how the score is calculated, please see the CalEnviroScreen website.</li>
-              <li> <b>Population Density:</b> Population density is the number of residents in a location divided by the total land area.</li>
-            </ul>"),
-              hr(),
-              fluidRow( # start fluid row 4.1
-                column(width = 5,
-                       h4('Socioeconomic Indicator'),
-                       radioButtons(
-                         inputId = 'factor_4_1',
-                         label = ' ',
-                         choices = c('Low Birth Weight' = 'low_birth_weight', 
-                                     'Cardiovascular Disease' = 'cardio_disease', 
-                                     'Education' = 'education', 
-                                     'Poverty' = 'poverty', 
-                                     'Unemplpoyment' = 'unemployment',
-                                     'CES Score' = 'ces')
-                       )
-                ), ### end column
-                column(width = 7,
-                       h4('Map of California Counties'),
-                       plotOutput(outputId = 'pop_plot')
-                )
-              ), ### end fluidRow 4.1
-              
-              hr(), ### horizontal rule so the row breaks are easier to see
-              p('talk about how they should look at the map'),
-              hr(),
-              
-              fluidRow( # start fluid row 4.2
-                column(
-                  width = 3,
-                  h4('Indicator'),
-                  radioButtons(
-                    inputId = 'factor_4_2',
-                    label = ' ',
-                    choices = c('Low Birth Weight' = 'low_birth_weight', 
-                                'Cardiovascular Disease' = 'cardio_disease', 
-                                'Education' = 'education', 
-                                'Poverty' = 'poverty', 
-                                'Unemplpoyment' = 'unemployment',
-                                'CES Score' = 'ces')
-                  )
-                  
-                ),
-                column(
-                  width = 9,
-                  h4('Indicators Across Counties'),
-                  plotOutput(outputId = 'poverty_cardio_plot')
-                )
-              ) ### end fluidRow 4.2
-              
-    ), ### end tab 4 
     
-    tabPanel( ### start tab 5
+    
+    
+    tabPanel( ################# start tab 4 ###########################
+      title = 'Environmental Justice',
+      
+      tags$img(src="water.jpeg", width="100%",height="200px", align = "justify"),
+      br(),
+      br(),
+      
+      fluidRow( ### start fluidRow 1
+        column(width=8,
+               h4(strong("Description"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+               includeMarkdown('tab4.md')
+        ), ### end column 
+        
+        
+        column(style="text-align:justify;color:#003366;background-color:#6699CC;padding:15px;border-radius:10px",
+               br(),
+               tags$img(src="clean_water.jpeg", width="455px",height="320px", align = "justify"), 
+               br(),
+               p(em("Credit: Centers for Disease Control and Prevention.", style="text-align:justify;font-size:12px")),
+               br(),
+               
+               br(),
+               tags$img(src="dirty_groundwater.jpeg", width="455px",height="320px", align = "justify"), 
+               br(),
+               p(em("Credit: All American Environmental.", style="text-align:justify;font-size:12px")),
+               br(),
+               
+               tags$img(src="contaminants_fig.jpeg", width="455px",height="320px", align = "justify"), 
+               br(),
+               p(em("Credit: FilterWater.com.", style="text-align:justify;font-size:12px")),
+               width=4,
+        ) ### end column 
+      ), ### end fluidRow 1
+      hr(),
+      
+      
+      
+      
+      hr(),
+      
+      fluidRow( # start fluid row 4.1
+        column(width = 3,
+               h5('Socioeconomic Indicator'),
+               radioButtons(
+                 inputId = 'factor_4_1',
+                 label = ' ',
+                 choices = c('Low Birth Weight' = 'low_birth_weight', 
+                             'Cardiovascular Disease' = 'cardio_disease', 
+                             'Education' = 'education', 
+                             'Poverty' = 'poverty', 
+                             'Unemplpoyment' = 'unemployment',
+                             'CES Score' = 'ces')
+               ) ### end radioButtons
+        ), ### end column
+        
+        column(width = 5,
+               h5('Map of California Counties'),
+               plotOutput(outputId = 'socio_plot')
+        ), ### end column
+        
+        column(width = 4,
+               h5('Indicators Across Counties'),
+               plotOutput(outputId = 'ces_barplot')
+        ) ### end column
+      ), ### end fluidRow 4.1
+      
+      hr(),
+      
+      fluidRow( # start fluid row 4.2
+        column(
+          width = 4,
+          # h4('Indicator'),
+          # radioButtons(
+          #   inputId = 'factor_4_2',
+          #   label = ' ',
+          #   choices = c('Low Birth Weight' = 'low_birth_weight',
+          #                         'Cardiovascular Disease' = 'cardio_disease',
+          #                         'Education' = 'education',
+          #                         'Poverty' = 'poverty',
+          #                         'Unemplpoyment' = 'unemployment',
+          #                         'CES Score' = 'ces')
+          # ) ### end radioButtons
+        ), ### end column
+        
+        column(
+          width = 7,
+          #h4('Indicators Across Counties'),
+          #plotOutput(outputId = 'poverty_cardio_plot')
+        ) ### end column
+      
+        ) ### end fluidRow 4.2
+    ), ############################# end tab 4 ##########################
+    
+    tabPanel( ##################### start tab 5 ##########################
       title = 'Groundwater Dependent Ecosystems',
       
       p(' If we have time :-) ')

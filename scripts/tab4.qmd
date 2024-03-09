@@ -19,7 +19,7 @@ library(dplyr)
 ```{r}
 ca_counties_raw_sf <- read_sf(here("data/ca_counties/CA_Counties_TIGER2016.shp"))
 socioeco_data <- read.csv(here('data/socioeco.csv'))
-water_quality <- read_csv(here('data/water_quality.csv'))
+# water_quality <- read_csv(here('data/water_quality.csv'))
 ```
 
 ############################################## CES + County Data
@@ -27,6 +27,7 @@ water_quality <- read_csv(here('data/water_quality.csv'))
 ### Edit the CES data
 
 ```{r}
+# group by county and return the columns listed, averaged
 socio_by_county <- socioeco_data %>% 
   dplyr::group_by(california_county) %>% 
   summarize(ces = mean(ces_4_0_percentile, na.rm = TRUE),
@@ -36,12 +37,17 @@ socio_by_county <- socioeco_data %>%
             poverty = mean(poverty_pctl, na.rm = TRUE),
             unemployment = mean(unemployment_pctl, na.rm = TRUE))
 
+# create a new 'county' column
 socio_by_county$county <- socio_by_county$california_county 
 
+# remove 'california_county' column, put it first, and clean the county names (remove spaces)
 socio_county <- socio_by_county %>% 
   select(-california_county) %>% 
   select(county, everything()) %>% 
-  mutate(county = str_squish(county))
+  mutate(county = str_squish(county)) %>% 
+  filter(county %in% c('Imperial', 'Kern', 'Los Angeles', 
+                                'Orange', 'Riverside', 'San Bernardino',
+                                'San Diego', 'San Luis Obispo', 'Santa Barbara', 'Ventura'))
 ```
 
 ### Create CA County Map and Overlay CES Score Data
@@ -54,7 +60,10 @@ ca_counties_sf <- ca_counties_raw_sf %>%
   janitor::clean_names() %>%
   mutate(land_km2 = aland / 1e6) %>%
   select(county = name, land_km2) %>% 
-  mutate(county = str_squish(county)) 
+  mutate(county = str_squish(county)) %>% 
+  filter(county %in% c('Imperial', 'Kern', 'Los Angeles', 
+                                'Orange', 'Riverside', 'San Bernardino',
+                                'San Diego', 'San Luis Obispo', 'Santa Barbara', 'Ventura'))
 #ca_counties_sf %>% st_crs() ###3857
 
 ### join the two together
@@ -80,11 +89,15 @@ socio_pivot <- socio_county %>%
   pivot_longer('ces':'unemployment', names_to = 'indicator', values_to = 'percentile') %>% 
   mutate(county = as.factor(county))
 
-poverty_cardio_plot <- ggplot(data = socio_pivot, 
-                              aes(x = reorder(county, percentile), y = percentile)) +
-        geom_col(position = 'dodge')  +
-        labs(x = 'County', y = 'Percentile') +
-        theme_minimal()
+poverty_cardio_plot <-  ggplot(data = socio_pivot, 
+                              aes(x = reorder(county, -percentile), y = percentile, fill = percentile)) +
+        geom_col(color = "black") +
+        scale_fill_gradientn(colors = c("lightgray", "orange","red")) + 
+        labs(x = 'County', y = 'Percentile', fill = "Percentile") +
+        theme_minimal() +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+              legend.position = 'none') +
+        theme(axis.text = element_text(size = 15))
 
 poverty_cardio_plot
 ```
@@ -144,22 +157,11 @@ ui <- fluidPage(
   titlePanel('California Groundwater'),
   tabsetPanel(
     
-    
     tabPanel( ### start tab 4
       title = 'Environmental Justice',
       
-      h4('Description:'), 
-      p('This tab shows socioeconomic and health indicators mapped by percentile in each county. An indicator measures environmental conditions as well as health and vulnerability factors. The CalEnviroScreen indicators fall into four categories: exposure, environmental, sensitive population, and socioeconomic. Here, we have selected relevant sensitive population and socioeconomic indicators, which may be correlated with groundwater quality.'),
-            HTML("<ul>
-              <li><b>Low Birth Weight: </b>Low birth weight is characterized by infants who weigh less than about five and a half pounds (2500 grams) at birth. Many factors, including poor nutrition, lack of prenatal care, stress, and smoking by the mother, can increase the risk of having a low birth-weight baby. Many factors can increase the risk of having a low birth-weight baby, including mothers who experience poverty, mothers who live in neighborhoods with high rates of violence or experience other stress, who do not have access to healthy foods, regular medical care, and prenatal care, and mothers who smoke. Exposure to pollution from traffic, industry, or agriculture also increases incidences of low-weight births. </li>
-              <li><b>Cardiovascular Disease: </b>Cardiovascular disease is a condition in which blood vessels are blocked or narrowed and this can cause heart attacks. There are many risk factors for developing cardiovascular disease including diet, lack of exercise, smoking, and exposure to air pollution. People with heart disease may react differently to pollution than those without.</li>
-              <li><b>Education:</b>Education refers to the highest level of education that an individual has attained. This is an important indicator because higher education correlates with higher income and therefore higher health standards. People with higher education tend to live longer, live in less polluted areas, and therefore experience fewer pollution-related health issues.  In California, 19% of adults over 25 do not have a high school degree, compared to 14% in the United States.</li>
-              <li><b>Poverty:</b>The poverty income level is set by the US Census Bureau every year. When household income falls below that level based on the size of a household and the ages of the individuals, those individuals are considered in poverty. This indicator is included because people who experience poverty have higher exposure to pollution and therefore have higher incidences of environmental-related health issues. These individuals also lack access to regular health care, nutrient-rich foods, and often do not have healthy living and working environments. Stress caused by poverty can also lower the immune system and increase health issues from exposure to pollution.</li>
-              <li><b>Unemployment:</b>Unemployment is considered anyone who is 16 years or older who is not working, but is able to work. This does not include students, active duty military, retired people, or people who have stopped looking for work. This is an important indicator because people who are not employed may not have health insurance or medical care, and that can lead to health issues, which inturn makes it more difficult to find work. Stress from long-term unemployment can lead to chronic illnesses, such as heart disease, and can shorten a person’s life.</li>
-              <li><b>CES Score: </b>The CES Score is an overall score that includes all 21 indicators. To read more about how the score is calculated, please see the CalEnviroScreen website.</li>
-              <li> <b>Population Density:</b> Population density is the number of residents in a location divided by the total land area.</li>
-            </ul>"),
-      hr(),
+      includeMarkdown('tab4.md'),
+      
       fluidRow( # start fluid row 4.1
       column(width = 5,
                     h4('Socioeconomic Indicator'),
@@ -172,12 +174,12 @@ ui <- fluidPage(
                                   'Poverty' = 'poverty', 
                                   'Unemplpoyment' = 'unemployment',
                                   'CES Score' = 'ces')
-                    )
+                    ) ### end radioButtons
         ), ### end column
         column(width = 7,
                     h4('Map of California Counties'),
                     plotOutput(outputId = 'pop_plot')
-        )
+        ) ### end column
       ), ### end fluidRow 4.1
       
       hr(), ### horizontal rule so the row breaks are easier to see
@@ -186,7 +188,7 @@ ui <- fluidPage(
       
       fluidRow( # start fluid row 4.2
         column(
-          width = 3,
+          width = 5,
           h4('Indicator'),
           radioButtons(
             inputId = 'factor_4_2',
@@ -197,20 +199,17 @@ ui <- fluidPage(
                                   'Poverty' = 'poverty', 
                                   'Unemplpoyment' = 'unemployment',
                                   'CES Score' = 'ces')
-          )
-          
-        ),
+          ) ### end radioButtons
+        ), ### end column
         column(
-          width = 9,
+          width = 7,
           h4('Indicators Across Counties'),
           plotOutput(outputId = 'poverty_cardio_plot')
-        )
+        ) ### end column
       ) ### end fluidRow 4.2
-      
-    ) ### end tab 4 
-  
-  )
-) # end Fluidpage
+    ) ### end tab 4
+  ) ### end tabset panel
+) ### end fluidPage
 ```
 
 ### Create the server function:
@@ -250,12 +249,11 @@ server <- function(input, output) {
         labs(x = 'County', y = 'Percentile', fill = "Percentile") +
         theme_minimal() +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-              legend.position = 'none')
+              legend.position = 'none') +
+        theme(text = element_text(size = 15))
       
  }) ### end poverty_cardio_plot
-    
 ### END tab 4, row 2
- 
 }
 ```
 

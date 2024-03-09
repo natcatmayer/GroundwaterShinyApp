@@ -56,11 +56,11 @@ server <- function(input, output, session) {
       geom_col(fill = "tan3") + 
       scale_y_continuous(trans = "reverse", expand = c(0,0), limits = c(200,0)) +
       labs(x = " ", 
-           y = "Average Groundwater Depth") +
+           y = "Average Depth to Groundwater") +
       theme_groundwater() +
       theme(axis.text.x = element_text(angle = 45, size = 12, vjust = -0.1), 
             axis.text.y = element_text(size = 12), 
-            axis.title=element_text(size=14,face="bold")) +
+            axis.title=element_text(size=18,face="bold", hjust = -0.2, vjust = 1)) +
       scale_x_discrete(breaks=seq(1985, 2023, 2))
   })
   

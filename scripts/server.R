@@ -127,7 +127,7 @@ server <- function(input, output, session) {
   
   output$chemical_plot <- renderPlot({
     ggplot(data = county_chemical_select()) + 
-      geom_col(aes(x = year, y = avg_measure, fill = chemical)) +
+      geom_col(aes(x = year, y = avg_measure, fill = chemical), position = "dodge") +
       geom_hline(data = epa_level_select(), aes(yintercept = level, linetype = chemical, color = chemical), size = 1) +
       scale_color_manual(values = color_vec) +
       scale_fill_manual(values = color_vec) +

@@ -138,15 +138,16 @@ ui <- fluidPage(
       fluidRow( # start fluid row 2.1
         
         column(width = 8,
-               h3('Southern California Groundwater Depth by County'),
+               h4(strong('Southern California Groundwater Depth by County'), 
+                  style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+               br(),
                plotOutput(outputId = 'gw_plot'),
-               
-               
+              
                sliderInput("year_2_1", label = h3("Select Year"), min = 1985, 
                            max = 2023, value = 2023, sep = "")
         ),
         
-        column(style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px",
+        column(style="text-align:justify;color:#FFFFFF;background-color:#6699CC;padding:15px;border-radius:10px",
                includeMarkdown('tab_2.md'),
                tags$img(src="aqueduct.jpeg", width="455px",height="250px", align = "justify"),
                p(em("California Aqueduct. Photo Credit: Public Policy Institute of California.", style="text-align:justify;font-size:12px")),
@@ -165,6 +166,13 @@ ui <- fluidPage(
       hr(),
       
       fluidRow( # start fluid row 2.2
+        
+        column(
+          width = 9,
+          h4(strong('Southern California Groundwater Depth by County'), 
+             style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+          plotOutput(outputId = 'gw_plot_2')),
+        
         column(
           width = 3,
           
@@ -172,14 +180,7 @@ ui <- fluidPage(
           selectInput("county_2_2", label = h3("Select County"),
                       choices = unique(depth_avg$name),
                       selected = 1)
-          
-          
         ), # end column
-        
-        column(
-          width = 9,
-          h3('Southern California Groundwater Depth by County'),
-          plotOutput(outputId = 'gw_plot_2'))
         
       ), ### end fluidRow 2.2
       
@@ -193,35 +194,83 @@ ui <- fluidPage(
     ), ############################## end tab 2 #############################
     
     
-    tabPanel( ### start tab 3
+    
+    tabPanel( ######################### start tab 3 #############################
       title = 'Groundwater Quality',
       
       
+      fluidRow(
+        column(width = 8, 
+               br(),
+          p("One of the solutions for groundwater depletion in California is Flood Managed Aquifer Recharge (MAR). 
+      In Flood-MAR, landowners voluntarily flooding their land during high precipitation events, allowing the 
+      water to infiltrate the soil, percolate downward, and recharge California’s aquifers. A limiting factor 
+      that could disqualify otherwise optimal locations for participating in flood-MAR is what elements are 
+      present in the soil. Soluble compounds present in high concentrations in the soil are likely to dissolve 
+      into the water and contaminate the groundwater as it recharges the aquifer. Due to human activities such 
+      as pesticide and fertilizer use in agriculture, wastewater treatment, and other chemical industrial processes, 
+      soils and surface waters can contain many harmful compounds. Elements of concern include Lead, Copper, Mercury,
+      and Arsenic. Unfortunately, the California State Water Resources Control Board lacks consistent historical data 
+      for these chemicals across the state.", 
+            style="text-align:justify;color:#FFFFFF;background-color:#6699CC;padding:15px;border-radius:10px"),
+        ), ### end column
+        
+        column(width = 4,
+               br(),
+          tags$img(src="contaminants_fig.jpeg", width="455px",height="250px", align = "justify"),
+          p(em("California Aqueduct. Photo Credit: Public Policy Institute of California.", 
+               style="text-align:justify;font-size:12px")),
+        )
+      ), ### end fluidRow
+      
+      hr(),
+      
+      
       fluidRow( # start fluid row 3.1
-        column(width = 3,
-               
-               radioButtons(
-                 inputId = 'chemical_3_1',
-                 label = h3('Select Chemical'),
-                 choices = c("PFOS (ng/L)" = "Perfluorooctane sulfonate (PFOS)", "PFOA (ng/L)" = "Perfluorooctanoic acid (PFOA)", "Alkalinity as CaCO3 (mg/L)" = "Alkalinity as CaCO3", "Boron (mg/L)" = "Boron", "Chloride (mg/L)" = "Chloride")),
+        
+        column(width = 8,
+               h4(strong('Southern California Groundwater Quality by County'), 
+                  style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+               plotOutput('chemical_map')
+        ), ### end column
+        
+        column(width = 2,
                
                radioButtons(
                  inputId = 'year_3_1', 
-                 label = h3("Select Year"), 
+                 label = h4("Select Year"), 
                  choices = unique(quality_avg$year) %>% sort(),
                  selected = 1)
                
         ), ### end column
         
-        column(width = 9,
-               h3('Southern California Groundwater Quality by County'),
-               plotOutput('chemical_map')
-        ) ### end column
+        column(width = 2,
+               
+               radioButtons(
+                 inputId = 'chemical_3_1',
+                 label = h4('Select Indicator'),
+                 choices = c("PFOS (ng/L)" = "Perfluorooctane sulfonate (PFOS)", 
+                             "PFOA (ng/L)" = "Perfluorooctanoic acid (PFOA)", 
+                             "Alkalinity (mg/L)" = "Alkalinity as CaCO3", 
+                             "Boron (mg/L)" = "Boron", 
+                             "Chloride (mg/L)" = "Chloride")),
+               
+        ), ### end column
         
       ), ### end fluidRow 3.1
-      
       hr(), ### horizontal rule so the row breaks are easier to see
-      p('talk about how they should look at the map'),
+      
+      fluidRow(
+        column(width = 7, 
+          includeMarkdown('chem_descriptions.md')
+        ),
+        
+        column(width = 5,
+               tags$img(src="table.png", width="100%",height="200px", align = "justify"),
+               ),
+      ), ### end fluidRow
+      
+      
       hr(),
       
       fluidRow( # start fluid row 3.2
@@ -230,12 +279,16 @@ ui <- fluidPage(
           
           selectInput("county_3_2", label = h3("Select County"),
                       choices = unique(quality_avg$name),
-                      selected = 1),
+                      selected = "Los Angeles"),
           
           checkboxGroupInput(
             inputId = 'chemical_3_2',
             label = h3('Select Chemical'),
-            choices = c("PFOS (ng/L)" = "Perfluorooctane sulfonate (PFOS)", "PFOA (ng/L)" = "Perfluorooctanoic acid (PFOA)", "Alkalinity as CaCO3 (mg/L)" = "Alkalinity as CaCO3", "Boron (mg/L)" = "Boron", "Chloride (mg/L)" = "Chloride")),
+            choices = c("PFOS (ng/L)" = "Perfluorooctane sulfonate (PFOS)", 
+                        "PFOA (ng/L)" = "Perfluorooctanoic acid (PFOA)", 
+                        "Alkalinity as CaCO3 (mg/L)" = "Alkalinity as CaCO3", 
+                        "Boron (mg/L)" = "Boron", "Chloride (mg/L)" = "Chloride"),
+            selected = "Perfluorooctane sulfonate (PFOS)"),
           
           
           hr(),

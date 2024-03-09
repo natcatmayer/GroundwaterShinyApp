@@ -2,10 +2,10 @@
 
 Groundwater makes up 99% of Earth’s liquid freshwater. Groundwater is
 stored in aquifers below the Earth’s surface and is one of the most
-important natural resources. Groundwater is used for drinking water,
+important natural resources (see Figure 1). Groundwater is used for drinking water,
 crop irrigation, and agricultural production. Many ecosystems and
 wildlife depend on groundwater, such as salamanders in wetlands and fish
-in rivers."),
+in rivers.
 
 **How do we measure and quantify groundwater?**
 
@@ -28,7 +28,7 @@ groundwater from the surface elevation.
 **Why is this analysis needed and important?**
 
 Groundwater is replenished or recharged by rain or snowmelt that seeps
-into the Earth’s surface. However, many people in the world face water
+into the Earth’s surface (see Figure 2). However, many people in the world face water
 shortages due to the over extraction of groundwater at a rate that is
 faster than the recharge. Many people also lack access to clean drinking
 water as groundwater is easily polluted by a multitude of chemicals,

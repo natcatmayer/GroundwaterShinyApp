@@ -119,9 +119,10 @@ ui <- fluidPage(
               br(),
               p(em("Developed by Natalie Mayer, Chelsea Sanford, and Madi Calbert"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
               
-              tags$img(src="water.jpeg", width="100%",height="200px", align = "justify"),
+              tags$img(src="water.jpeg", width="100%",height="150px", align = "justify"),
               br(),
-              br(),
+              br()
+             
        
             ), ########################### end tab 1 ##############################
     
@@ -187,7 +188,7 @@ ui <- fluidPage(
       br(),
       p(em("Developed by Natalie Mayer, Chelsea Sanford, and Madi Calbert"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
       
-      tags$img(src="water.jpeg", width="100%",height="200px", align = "justify"),
+      tags$img(src="water.jpeg", width="100%",height="150px", align = "justify"),
       br(),
       br(),
       
@@ -300,10 +301,16 @@ ui <- fluidPage(
           width = 9,
           h3('Southern California Groundwater Quality by County'),
           plotOutput('chemical_plot'))
-      ) ### end fluidRow 3.2
+      ), ### end fluidRow 3.2
       
+      br(),
+      p(em("Developed by Natalie Mayer, Chelsea Sanford, and Madi Calbert"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
       
-    ), ### end tab 3  
+      tags$img(src="water.jpeg", width="100%",height="150px", align = "justify"),
+      br(),
+      br()
+      
+    ), ############################ end tab 3  ###########################
     
     
     
@@ -311,10 +318,6 @@ ui <- fluidPage(
     
     tabPanel( ################# start tab 4 ###########################
       title = 'Environmental Justice',
-      
-      tags$img(src="water.jpeg", width="100%",height="200px", align = "justify"),
-      br(),
-      br(),
       
       fluidRow( ### start fluidRow 1
         column(width=8,
@@ -399,15 +402,17 @@ ui <- fluidPage(
           #plotOutput(outputId = 'poverty_cardio_plot')
         ) ### end column
       
-        ) ### end fluidRow 4.2
+        ), ### end fluidRow 4.2
+      
+      br(),
+      p(em("Developed by Natalie Mayer, Chelsea Sanford, and Madi Calbert"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+      
+      tags$img(src="water.jpeg", width="100%",height="150px", align = "justify"),
+      br(),
+      br()
+      
     ), ############################# end tab 4 ##########################
     
-    tabPanel( ##################### start tab 5 ##########################
-      title = 'Groundwater Dependent Ecosystems',
-      
-      p(' If we have time :-) ')
-      
-    ) ### end tab 5  
   ) ### end tabsetPanel
   
 ) # end Fluidpage

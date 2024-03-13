@@ -152,17 +152,17 @@ server <- function(input, output, session) {
     ggplot(data = soc_select()) +
       geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
       labs(fill = "Percentile") +
-      scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
+      scale_fill_gradientn(colors = c("lightgray", "darkorange","red4")) +
       theme_void() +
       theme(legend.position = 'none')
-  }) ### end ces_plot
+  }) ### end socio_plot
   
   output$ces_barplot <- renderPlot({ ### start ces_barplot
     ggplot(data = soc_select(), 
            aes(x = reorder(county, -percentile), 
                y = percentile, fill = percentile)) +
       geom_col(color = "black") +
-      scale_fill_gradientn(colors = c("lightgray", "orange","red")) + 
+      scale_fill_gradientn(colors = c("lightgray", "darkorange","red4")) + 
       labs(x = 'County', y = 'Percentile', fill = "Percentile") +
       theme_minimal() +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),

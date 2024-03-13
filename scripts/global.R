@@ -101,7 +101,7 @@ county_socio_join <- merge(x = ca_counties_sf,
 ### ggplot
 socio_plot <- ggplot(data = county_socio_join) +
   geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
-  scale_fill_gradientn(colors = c("lightgray", "orange","red")) +
+  scale_fill_gradientn(colors = c("lightgray", "darkorange","red4")) +
   theme_void() +
   labs(fill = "Population Density") +
   theme(legend.position = 'none')
@@ -112,7 +112,7 @@ ces_barplot <-  ggplot(data = county_socio_join,
                            y = percentile, 
                            fill = percentile)) +
   geom_col(color = "black") +
-  scale_fill_gradientn(colors = c("lightgray", "orange","red")) + 
+  scale_fill_gradientn(colors = c("lightgray", "gold","red4")) + 
   labs(x = 'County', y = 'Percentile', fill = "Percentile") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),

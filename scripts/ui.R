@@ -337,7 +337,7 @@ ui <- fluidPage(
       hr(),
       
       fluidRow( # start fluid row 4.1
-        column(width = 3,
+        column(width = 2,
                h5('Socioeconomic Indicator'),
                radioButtons(
                  inputId = 'factor_4_1',
@@ -351,7 +351,7 @@ ui <- fluidPage(
                ) ### end radioButtons
         ), ### end column
         
-        column(width = 5,
+        column(width = 6,
                h5('Map of California Counties'),
                plotOutput(outputId = 'socio_plot')
         ), ### end column

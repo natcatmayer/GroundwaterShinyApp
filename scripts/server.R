@@ -153,6 +153,7 @@ server <- function(input, output, session) {
       geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
       labs(fill = "Percentile") +
       scale_fill_gradientn(colors = c("lightgray", "darkorange","red4")) +
+      geom_sf_label(aes(label = county)) +
       theme_void() +
       theme(legend.position = 'none')
   }) ### end socio_plot

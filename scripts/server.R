@@ -173,5 +173,30 @@ server <- function(input, output, session) {
   ### END tab 4, row 1
   
   
+  ### START tab 5
+  
+  time_series_select <- reactive({depth_ts %>%
+      filter(name %in% input$county_ts)
+  })
+  
+  output$time_series <- renderPlot({
+    time_series_data <- time_series_select() %>%
+      model(ets = ETS(average_depth ~ trend(method = "A"))) %>%
+      forecast(h = "10 years")
+    autoplot(time_series_data, time_series_select(), linewidth = 2, color = "blue") + 
+      scale_y_continuous(trans = "reverse", expand = c(0,0)) +
+      geom_hline(yintercept = 0, color = "black", linewidth =3) +
+      theme_minimal() + 
+      labs(x = "Year", 
+           y = "Average Depth to Groundwater") + 
+      theme(legend.position = "none", 
+            axis.text.x = element_text(size = 12), 
+            axis.text.y = element_text(size = 12), 
+            axis.title.x = element_text(size = 14), 
+            axis.title.y = element_text(size = 14))})
+  
+  ### END tab 5
+  
+  
   
 }

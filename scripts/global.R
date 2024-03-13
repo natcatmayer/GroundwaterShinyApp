@@ -8,6 +8,9 @@ library(here)
 library(sf)
 library(bslib)
 library(shinydashboard)
+library(tsibble)
+library(feasts)
+library(fable)
 
 ### Data
 
@@ -98,27 +101,6 @@ county_socio_join <- merge(x = ca_counties_sf,
   pivot_longer('ces':'unemployment', names_to = 'parameter', values_to = 'percentile') %>% 
   mutate(county = as.factor(county))
 
-### ggplot
-socio_plot <- ggplot(data = county_socio_join) +
-  geom_sf(aes(fill = percentile, geometry = geometry), color = "white", size = 0.1) +
-  scale_fill_gradientn(colors = c("lightgray", "darkorange","red4")) +
-  theme_void() +
-  labs(fill = "Population Density") +
-  theme(legend.position = 'none')
-
-### bar graph comparing counts by county
-ces_barplot <-  ggplot(data = county_socio_join, 
-                       aes(x = reorder(county, -percentile), 
-                           y = percentile, 
-                           fill = percentile)) +
-  geom_col(color = "black") +
-  scale_fill_gradientn(colors = c("lightgray", "gold","red4")) + 
-  labs(x = 'County', y = 'Percentile', fill = "Percentile") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-        legend.position = 'none') +
-  theme(axis.text = element_text(size = 15))
-
 ## tab 2 data load 
 
 
@@ -126,3 +108,10 @@ quality_avg <- read_sf(dsn = here('data', 'avg_so_cal_water_quality.gpkg'))
 depth_avg <- read_sf(dsn = here('data', 'depth_average.gpkg'))
 county_shapes <- read_sf(dsn = here('data', 'so_cal_county_shape.gpkg'))
 epa_levels <- read_csv(here('data', 'epa_levels.csv')) %>% janitor::clean_names()
+
+
+## predictions load data
+
+depth_ts <- depth_avg %>%
+  mutate(year = as.numeric(year)) %>%
+  as_tsibble(key = name, index = year)

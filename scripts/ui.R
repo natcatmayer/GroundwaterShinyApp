@@ -330,7 +330,8 @@ ui <- fluidPage(
       title = 'Environmental Justice',
       
       br(),
-      h4(strong("Socioeconomic & Health Indicators"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+      h4(strong("Socioeconomic & Health Indicators"), 
+         style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
       
       
       hr(),
@@ -388,8 +389,6 @@ ui <- fluidPage(
       ), ### end fluidRow 4.2
      
       
-      
-      
      
       fluidRow( # start fluid row 4.2
         column(
@@ -423,6 +422,33 @@ ui <- fluidPage(
       br()
       
     ), ############################# end tab 4 ##########################
+    
+    
+    tabPanel( ####################### start tab 5 ####################
+      title = "Sustainable Groundwater Management Act",
+      
+      br(),
+      h4(strong("Socioeconomic & Health Indicators"), 
+         style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+      
+              fluidRow(
+                
+                column(width = 3, 
+                       
+                       selectInput("county_ts", label = h3("Select County"), 
+                                   choices = unique(depth_ts$name), 
+                                   selected = "Santa Barbara"),
+                       
+                ),  ### end column 1
+                
+                column(width = 9, 
+                       
+                       plotOutput(outputId = 'time_series')
+                       
+                ) ### end column 2
+              ) ### end fluidRow
+              
+    ) ####################### end tab 5 ####################
     
   ) ### end tabsetPanel
   

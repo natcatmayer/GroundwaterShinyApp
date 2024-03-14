@@ -3,7 +3,7 @@
 ui <- fluidPage(
   theme = bs_theme(bootswatch = 'cerulean'),
   
-  titlePanel('California Groundwater'),
+  titlePanel('Southern California Groundwater'),
   tabsetPanel(
     
     tabPanel( ######################## start tab 1 #############################
@@ -16,8 +16,8 @@ ui <- fluidPage(
               fluidRow( ### start fluidRow 1
                     column(width=8,
                             h4(strong("Purpose"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
-                            p("This interactive tool presents data on how groundwater depth and groundwater quality
-                              intersects with socioeconomic factors in California counties."), # End paragraph 1 
+                            p("This interactive tool explores pattern in groundwater depth and groundwater quality
+                              and socioeconomic factors in Southern California counties."), # End paragraph 1 
                             br(), # Line break
                        
                             h4(strong("Background"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
@@ -66,21 +66,17 @@ ui <- fluidPage(
                        h4(strong("Website Content"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
                             p(" This website is comprised of three main tabs:"),
                                 p(tags$b("Tab 1 - Groundwater Levels")), 
-                                p("This analysis explores the currents trends in groundwater depth 
-                                and elevation in all California counties."),
+                                p("This analysis explores the currents trends in groundwater depth in Southern California counties from 1985 to 2023."),
                                 p(tags$b("Tab 2 - Groundwater Quality")),
                                 p("This analysis explores chemical pollutants impacting groundwater."),
                                 p(tags$b("Tab 3 - Environmental Justice")),
-                                p("This analysis shows socioeconomic variables mapped by percentile in each county. Socioeconomic variables 
-                                explore in this analysis include:"),
+                                p("This analysis shows socioeconomic variables mapped by percentile in each county."),
+                                p(tags$b("Tab 4 - Sustainable Groundwater Management Act (SGMA 2014)")),
+                                p("This analysis shows projected depth to groundwater and explains SGMA and potential solutions to mitigate groundwater depletion."),
                             br(), # Line break
                        
                        h4(strong("Data Source"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
-                            p("In this analysis, groundwater levels and quality across all 58 California counties are analyzed. 
-                            Our analysis includes measurements from 285,273 wells of groundwater depth from the surface (ft), 
-                            PFOA in (ng/L), PFOS (ng/L), Calcium Carbonate (mg/L), bicarbonate (mg/L), mercury (ug/L), nitrate 
-                            (mg/L), arsenic (ug/L), and lead (ug/L)."),     
-                       
+         
                             p(strong("Groundwater depth and water quality data:")),
                             p("The Groundwater Ambient Monitoring and Assessment (GAMA) Program is California's comprehensive 
                             groundwater quality monitoring program that was created by the State Water Resources Control Board 
@@ -96,8 +92,12 @@ ui <- fluidPage(
                               Senate Bill (SB) 535 (De León, Chapter 830, Statutes of 2012), which established initial requirements 
                               for minimum funding levels to “Disadvantaged Communities” (DACs). The legislation also gives CalEPA the 
                               responsibility for identifying those communities, stating that CalEPA’s designation of disadvantaged 
-                              communities must be based on “geographic, socioeconomic, public health, and environmental hazard criteria”.")
-                ), ### end column 
+                              communities must be based on “geographic, socioeconomic, public health, and environmental hazard criteria”."),
+                
+                           p(strong("County Shapefile Data:")),
+                          p("This data was sourced from the US Census Bureau's Masters "),
+                       
+                       ), ### end column 
                 
                 column(style="text-align:justify;color:#003366;background-color:#6699CC;padding:15px;border-radius:10px",
                        br(), 
@@ -207,27 +207,7 @@ ui <- fluidPage(
       h4(strong('Southern California Groundwater Quality by County'), 
          style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
       
-      fluidRow(
-        column(width = 8, 
-          p("One of the solutions for groundwater depletion in California is Flood Managed Aquifer Recharge (MAR). 
-      In Flood-MAR, landowners voluntarily flooding their land during high precipitation events, allowing the 
-      water to infiltrate the soil, percolate downward, and recharge California’s aquifers. A limiting factor 
-      that could disqualify otherwise optimal locations for participating in flood-MAR is what elements are 
-      present in the soil. Soluble compounds present in high concentrations in the soil are likely to dissolve 
-      into the water and contaminate the groundwater as it recharges the aquifer. Due to human activities such 
-      as pesticide and fertilizer use in agriculture, wastewater treatment, and other chemical industrial processes, 
-      soils and surface waters can contain many harmful compounds. Elements of concern include Lead, Copper, Mercury,
-      and Arsenic. Unfortunately, the California State Water Resources Control Board lacks consistent historical data 
-      for these chemicals across the state.", 
-            style="text-align:justify;color:#FFFFFF;background-color:#6699CC;padding:15px;border-radius:10px"),
-        ), ### end column
-        
-        column(width = 4,
-          tags$img(src="flood_mar.jpeg", width="400px",height="250px", align = "justify"),
-          p(em("Flooded Vineyards in California. Photo Credit: Sustainable Conservation", 
-               style="text-align:justify;font-size:12px")),
-        )
-      ), ### end fluidRow
+      
       
       hr(),
       
@@ -425,28 +405,87 @@ ui <- fluidPage(
     
     
     tabPanel( ####################### start tab 5 ####################
-      title = "Sustainable Groundwater Management Act",
+      title = "SGMA",
       
       br(),
-      h4(strong("Socioeconomic & Health Indicators"), 
+      h4(strong("Sustainable Groundwater Management Act"), 
          style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
       
-              fluidRow(
-                
+      fluidRow(
+        br(),
+        column(width = 6, 
+              includeMarkdown("sgma1.md")
+               
+        ),  ### end column 1
+        
+        column(width = 6, 
+               br(),
+               tags$img(src="6_undesireable_results.jpeg", width="700px",height="300px", align = "justify"),
+               p(em("GSA Six Undesirable Results. Credit: California Department of Water Resources.", 
+                    style="text-align:justify;font-size:12px")),
+        ), ### end column 2
+        hr(),
+      ), ### end fluidRow        
+      
+      
+      h4(strong("Predicted Depth to Groundwater"), 
+         style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+      
+      fluidRow(
+                br(),
                 column(width = 3, 
-                       
+                       br(),
                        selectInput("county_ts", label = h3("Select County"), 
                                    choices = unique(depth_ts$name), 
                                    selected = "Santa Barbara"),
                        
-                ),  ### end column 1
+                      ),  ### end column 1
                 
                 column(width = 9, 
-                       
-                       plotOutput(outputId = 'time_series')
-                       
-                ) ### end column 2
-              ) ### end fluidRow
+                       br(),
+                       plotOutput(outputId = 'time_series'),
+                       br(),
+                       p("This graph shows projections for average depth to groundwater for each of the counties in Southern California 
+                          for the next 10 years. The bold blue line represents the projection, the shaded blue surrounding the line represents 
+                          the 80% prediction interval, and the light blue shaded area represents the 95% prediction interval. The horizontal 
+                          black line shows a depth of zero, representing the ground surface level."),
+                      ), ### end column 2
+                
+                hr(),
+                br(),
+                
+                
+                
+                fluidRow(
+                  column(width = 7,
+                         br(),
+                         tags$img(src="GSP_process.png", width="700px",height="400px", align = "justify"),
+                         p(em("GSP Process. Credit: Department of Water Resources.", 
+                              style="text-align:justify;font-size:12px")),  
+                         
+                         tags$img(src="flood_mar.jpeg", width="600px",height="350px", align = "justify"),
+                         p(em("Flooded Vineyards in California. Photo Credit: Sustainable Conservation", 
+                              style="text-align:justify;font-size:12px"))
+                  ), ## end column 1
+                  
+                  column(width = 5,
+                         includeMarkdown("sgma.md"), 
+                         style="text-align:justify;color:#FFFFFF;background-color:#6699CC;padding:15px;border-radius:10px",
+             
+                         ), ## end column 2
+                  br()
+                ), ### end fluidRow
+              
+                
+              ), ### end fluidRow
+      
+      br(),
+      p(em("Developed by Natalie Mayer, Chelsea Sanford, and Madi Calbert"), 
+        style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
+      
+      tags$img(src="water.jpeg", width="100%",height="150px", align = "justify"),
+      br(),
+      br()
               
     ) ####################### end tab 5 ####################
     

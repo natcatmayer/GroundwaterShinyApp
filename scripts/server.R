@@ -164,9 +164,10 @@ server <- function(input, output, session) {
                y = percentile, fill = percentile)) +
       geom_col(color = "black") +
       scale_fill_gradientn(colors = c("lightgray", "darkorange","red4")) + 
-      labs(x = 'County', y = 'Percentile', fill = "Percentile") +
+      labs(x = '', y = 'Percentile', fill = "Percentile") +
       theme_minimal() +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1, size = 12),
+            axis.text.y = element_text(size = 12),
             legend.position = 'none') +
       theme(text = element_text(size = 15))
   }) ### end ces_barplot

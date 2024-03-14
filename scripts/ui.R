@@ -95,7 +95,8 @@ ui <- fluidPage(
                               communities must be based on “geographic, socioeconomic, public health, and environmental hazard criteria”."),
                 
                            p(strong("County Shapefile Data:")),
-                          p("This data was sourced from the US Census Bureau's Masters "),
+                           p("This data was sourced from the US Census Bureau's Master Address File / Topologically Integrated 
+                            Geographic Encoding and Referencing (MAF/TIGER) Database (MTDB). The county boundaries are current as of January 2015."),
                        
                        ), ### end column 
                 
@@ -326,7 +327,7 @@ ui <- fluidPage(
                              'Cardiovascular Disease' = 'cardio_disease', 
                              'Education' = 'education', 
                              'Poverty' = 'poverty', 
-                             'Unemplpoyment' = 'unemployment',
+                             'Unemployment' = 'unemployment',
                              'CES Score' = 'ces')
                ) ### end radioButtons
         ), ### end column
@@ -368,31 +369,6 @@ ui <- fluidPage(
         ) ### end column 
       ), ### end fluidRow 4.2
      
-      
-     
-      fluidRow( # start fluid row 4.2
-        column(
-          width = 4,
-          # h4('Indicator'),
-          # radioButtons(
-          #   inputId = 'factor_4_2',
-          #   label = ' ',
-          #   choices = c('Low Birth Weight' = 'low_birth_weight',
-          #                         'Cardiovascular Disease' = 'cardio_disease',
-          #                         'Education' = 'education',
-          #                         'Poverty' = 'poverty',
-          #                         'Unemplpoyment' = 'unemployment',
-          #                         'CES Score' = 'ces')
-          # ) ### end radioButtons
-        ), ### end column
-        
-        column(
-          width = 7,
-          #h4('Indicators Across Counties'),
-          #plotOutput(outputId = 'poverty_cardio_plot')
-        ) ### end column
-      
-        ), ### end fluidRow 4.2
       
       br(),
       p(em("Developed by Natalie Mayer, Chelsea Sanford, and Madi Calbert"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),

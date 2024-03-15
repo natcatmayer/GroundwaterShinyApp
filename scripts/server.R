@@ -60,7 +60,7 @@ server <- function(input, output, session) {
       theme_groundwater() +
       theme(axis.text.x = element_text(angle = 45, size = 12, vjust = -0.1), 
             axis.text.y = element_text(size = 12), 
-            axis.title=element_text(size=18,face="bold", hjust = -0.2, vjust = 1)) +
+            axis.title=element_text(size=18,face="bold", hjust = -0.2, vjust = 1.5)) +
       scale_x_discrete(breaks=seq(1985, 2023, 2))
   })
   

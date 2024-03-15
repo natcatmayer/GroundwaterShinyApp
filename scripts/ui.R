@@ -17,7 +17,7 @@ ui <- fluidPage(
               fluidRow( ### start fluidRow 1
                     column(width=8,
                             h4(strong("Purpose"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
-                            p("This interactive tool explores pattern in groundwater depth and groundwater quality
+                            p("This interactive tool explores patterns in groundwater depth and groundwater quality
                               and socioeconomic factors in Southern California counties."), # End paragraph 1 
                             br(), # Line break
                        
@@ -64,7 +64,7 @@ ui <- fluidPage(
                 column(width=8,
                        h4(strong("Website Content"), style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
                             p(" This website is comprised of three main tabs:"),
-                                p(tags$b("Tab 1 - Groundwater Levels")), 
+                                p(tags$b("Tab 1 - Groundwater Depth")), 
                                 p("This analysis explores the currents trends in groundwater depth in Southern California counties from 1985 to 2023."),
                                 p(tags$b("Tab 2 - Groundwater Quality")),
                                 p("This analysis explores chemical pollutants impacting groundwater."),
@@ -130,7 +130,7 @@ ui <- fluidPage(
     
     
     tabPanel( ########################## start tab 2 ################################
-      title = 'Groundwater Levels',
+      title = 'Groundwater Depth',
       
       
       br(),
@@ -221,7 +221,7 @@ ui <- fluidPage(
                
                radioButtons(
                  inputId = 'year_3_1', 
-                 label = h4("Select Year"), 
+                 label = h3("Select Year"), 
                  choices = unique(quality_avg$year) %>% sort(),
                  selected = 1)
                
@@ -231,7 +231,7 @@ ui <- fluidPage(
                
                radioButtons(
                  inputId = 'chemical_3_1',
-                 label = h4('Select Indicator'),
+                 label = h3('Select Indicator'),
                  choices = c("PFOS (ng/L)" = "Perfluorooctane sulfonate (PFOS)", 
                              "PFOA (ng/L)" = "Perfluorooctanoic acid (PFOA)", 
                              "Alkalinity (mg/L)" = "Alkalinity as CaCO3", 
@@ -319,7 +319,7 @@ ui <- fluidPage(
       
       fluidRow( # start fluid row 4.1
         column(width = 2,
-               h5('Socioeconomic Indicator'),
+               h3('Select Indicator'),
                radioButtons(
                  inputId = 'factor_4_1',
                  label = ' ',
@@ -333,12 +333,12 @@ ui <- fluidPage(
         ), ### end column
         
         column(width = 6,
-               h5('Map of California Counties'),
+               
                plotOutput(outputId = 'socio_plot')
         ), ### end column
         
         column(width = 4,
-               h5('Indicators Across Counties'),
+               
                plotOutput(outputId = 'ces_barplot')
         ) ### end column
       ), ### end fluidRow 4.1
@@ -405,7 +405,7 @@ ui <- fluidPage(
       ), ### end fluidRow        
       
       
-      h4(strong("Predicted Depth to Groundwater"), 
+      h4(strong("Projected Depth to Groundwater"), 
          style="text-align:justify;color:#FFFFFF;background-color:#003366;padding:15px;border-radius:10px"),
       
       fluidRow(

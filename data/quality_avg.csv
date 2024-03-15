@@ -1,0 +1,272 @@
+name,chemical,year,avg_measure
+Imperial,Perfluorooctane sulfonate (PFOS),2019,1.82
+Imperial,Perfluorooctane sulfonate (PFOS),2022,1.9
+Imperial,Perfluorooctane sulfonate (PFOS),2023,1927
+Imperial,Perfluorooctanoic acid (PFOA),2019,1.4222222222222223
+Imperial,Perfluorooctanoic acid (PFOA),2022,1.9
+Imperial,Perfluorooctanoic acid (PFOA),2023,578.5
+Kern,Alkalinity as CaCO3,1985,104.66666666666667
+Kern,Alkalinity as CaCO3,1986,109
+Kern,Alkalinity as CaCO3,1987,128.33333333333334
+Kern,Alkalinity as CaCO3,1990,107.72727272727273
+Kern,Alkalinity as CaCO3,1991,95.48936170212765
+Kern,Boron,1985,0.2125
+Kern,Boron,1987,0.18375000000000002
+Kern,Boron,1988,0.3271428571428571
+Kern,Boron,1990,0.31666666666666665
+Kern,Chloride,1985,56.273529411764706
+Kern,Chloride,1986,35.75
+Kern,Chloride,1987,113.91666666666667
+Kern,Chloride,1988,32.98474576271187
+Kern,Chloride,1989,30.5
+Kern,Chloride,1990,41.705882352941174
+Kern,Chloride,1991,29.76595744680851
+Kern,Perfluorooctane sulfonate (PFOS),2016,2
+Kern,Perfluorooctane sulfonate (PFOS),2018,2.5
+Kern,Perfluorooctane sulfonate (PFOS),2019,1.0452542372881355
+Kern,Perfluorooctane sulfonate (PFOS),2020,4.0705426356589145
+Kern,Perfluorooctane sulfonate (PFOS),2021,1324.8894736842105
+Kern,Perfluorooctane sulfonate (PFOS),2022,3.9594827586206898
+Kern,Perfluorooctane sulfonate (PFOS),2023,3.860728744939271
+Kern,Perfluorooctane sulfonate (PFOS),2024,4.642857142857143
+Kern,Perfluorooctanoic acid (PFOA),2016,2
+Kern,Perfluorooctanoic acid (PFOA),2018,2.5
+Kern,Perfluorooctanoic acid (PFOA),2019,2.789491525423729
+Kern,Perfluorooctanoic acid (PFOA),2020,4.6734375
+Kern,Perfluorooctanoic acid (PFOA),2021,195.5988950276243
+Kern,Perfluorooctanoic acid (PFOA),2022,3.1822510822510823
+Kern,Perfluorooctanoic acid (PFOA),2023,3.3222672064777328
+Kern,Perfluorooctanoic acid (PFOA),2024,2.5821428571428573
+Los Angeles,Alkalinity as CaCO3,1985,162.15021459227466
+Los Angeles,Alkalinity as CaCO3,1986,172.25595238095238
+Los Angeles,Alkalinity as CaCO3,1987,170.73636363636365
+Los Angeles,Alkalinity as CaCO3,1988,167.0081300813008
+Los Angeles,Alkalinity as CaCO3,1989,170.55789473684212
+Los Angeles,Alkalinity as CaCO3,1990,179
+Los Angeles,Alkalinity as CaCO3,1991,175.73015873015873
+Los Angeles,Boron,1985,39.69662393162393
+Los Angeles,Boron,1986,0.2696385542168675
+Los Angeles,Boron,1987,0.21156398104265403
+Los Angeles,Boron,1988,0.18852216748768472
+Los Angeles,Boron,1989,0.17734299516908214
+Los Angeles,Boron,1990,0.13889830508474577
+Los Angeles,Boron,1991,0.20419354838709677
+Los Angeles,Chloride,1985,103.61904761904762
+Los Angeles,Chloride,1986,42.72289156626506
+Los Angeles,Chloride,1987,52.889380530973455
+Los Angeles,Chloride,1988,48.669135802469135
+Los Angeles,Chloride,1989,120.50657894736842
+Los Angeles,Chloride,1990,37.92773109243697
+Los Angeles,Chloride,1991,36.434375
+Los Angeles,Chloride,2002,1210
+Los Angeles,Chloride,2003,1140
+Los Angeles,Chloride,2006,960
+Los Angeles,Perfluorooctane sulfonate (PFOS),2017,425.695
+Los Angeles,Perfluorooctane sulfonate (PFOS),2018,457.77647058823527
+Los Angeles,Perfluorooctane sulfonate (PFOS),2019,13.971916264090178
+Los Angeles,Perfluorooctane sulfonate (PFOS),2020,70.64527452380952
+Los Angeles,Perfluorooctane sulfonate (PFOS),2021,112.41317234042553
+Los Angeles,Perfluorooctane sulfonate (PFOS),2022,288.9501780073801
+Los Angeles,Perfluorooctane sulfonate (PFOS),2023,84.66148653940284
+Los Angeles,Perfluorooctane sulfonate (PFOS),2024,10.99047619047619
+Los Angeles,Perfluorooctanoic acid (PFOA),2017,232.63625
+Los Angeles,Perfluorooctanoic acid (PFOA),2018,133.12941176470588
+Los Angeles,Perfluorooctanoic acid (PFOA),2019,9.169452495974236
+Los Angeles,Perfluorooctanoic acid (PFOA),2020,19.691631828978622
+Los Angeles,Perfluorooctanoic acid (PFOA),2021,10.862838348868175
+Los Angeles,Perfluorooctanoic acid (PFOA),2022,43.23248147601476
+Los Angeles,Perfluorooctanoic acid (PFOA),2023,49.691735682819385
+Los Angeles,Perfluorooctanoic acid (PFOA),2024,6.914285714285715
+Orange,Alkalinity as CaCO3,1985,116.25
+Orange,Alkalinity as CaCO3,1987,174.23529411764707
+Orange,Alkalinity as CaCO3,1989,191
+Orange,Boron,1985,26.97
+Orange,Boron,1987,0.21176470588235294
+Orange,Chloride,1985,51.6
+Orange,Chloride,1987,56.05882352941177
+Orange,Chloride,1989,87.5
+Orange,Perfluorooctane sulfonate (PFOS),2016,49.62
+Orange,Perfluorooctane sulfonate (PFOS),2017,19.063855421686746
+Orange,Perfluorooctane sulfonate (PFOS),2018,20.19578947368421
+Orange,Perfluorooctane sulfonate (PFOS),2019,111.7493108359133
+Orange,Perfluorooctane sulfonate (PFOS),2020,24.783384223918574
+Orange,Perfluorooctane sulfonate (PFOS),2021,57.872270168855536
+Orange,Perfluorooctane sulfonate (PFOS),2022,43.76862595419847
+Orange,Perfluorooctane sulfonate (PFOS),2023,17.07670988654781
+Orange,Perfluorooctanoic acid (PFOA),2016,20.94
+Orange,Perfluorooctanoic acid (PFOA),2017,11.080722891566266
+Orange,Perfluorooctanoic acid (PFOA),2018,11.641052631578948
+Orange,Perfluorooctanoic acid (PFOA),2019,78.16937353846154
+Orange,Perfluorooctanoic acid (PFOA),2020,14.160612244897958
+Orange,Perfluorooctanoic acid (PFOA),2021,13.904370229007634
+Orange,Perfluorooctanoic acid (PFOA),2022,9.811870229007633
+Orange,Perfluorooctanoic acid (PFOA),2023,8.375235008103727
+Riverside,Alkalinity as CaCO3,1985,1078.6666666666667
+Riverside,Alkalinity as CaCO3,1986,165.75
+Riverside,Alkalinity as CaCO3,1987,183.66666666666666
+Riverside,Alkalinity as CaCO3,1988,141.27272727272728
+Riverside,Alkalinity as CaCO3,1989,162
+Riverside,Alkalinity as CaCO3,2000,177
+Riverside,Alkalinity as CaCO3,2004,114.81818181818181
+Riverside,Boron,1985,0.225
+Riverside,Boron,1986,0.14166666666666666
+Riverside,Boron,1987,0.2
+Riverside,Boron,1988,0.07250000000000001
+Riverside,Boron,1989,0.1
+Riverside,Boron,2000,0.027692307692307693
+Riverside,Boron,2004,0.26363636363636367
+Riverside,Chloride,1985,99.5
+Riverside,Chloride,1986,50.98421052631579
+Riverside,Chloride,1987,66
+Riverside,Chloride,1988,59.63636363636363
+Riverside,Chloride,1989,108.5
+Riverside,Chloride,2000,169.421875
+Riverside,Chloride,2004,140.1818181818182
+Riverside,Perfluorooctane sulfonate (PFOS),2016,40
+Riverside,Perfluorooctane sulfonate (PFOS),2017,34.79565217391304
+Riverside,Perfluorooctane sulfonate (PFOS),2018,49.45492957746479
+Riverside,Perfluorooctane sulfonate (PFOS),2019,15.318588588588588
+Riverside,Perfluorooctane sulfonate (PFOS),2020,18.085525672371638
+Riverside,Perfluorooctane sulfonate (PFOS),2021,24.989016853932583
+Riverside,Perfluorooctane sulfonate (PFOS),2022,26.652727884615384
+Riverside,Perfluorooctane sulfonate (PFOS),2023,25.248463055555554
+Riverside,Perfluorooctane sulfonate (PFOS),2024,18.65
+Riverside,Perfluorooctanoic acid (PFOA),2016,20
+Riverside,Perfluorooctanoic acid (PFOA),2017,49.5648
+Riverside,Perfluorooctanoic acid (PFOA),2018,44.58732394366197
+Riverside,Perfluorooctanoic acid (PFOA),2019,12.142492492492492
+Riverside,Perfluorooctanoic acid (PFOA),2020,15.812689486552568
+Riverside,Perfluorooctanoic acid (PFOA),2021,19.94182584269663
+Riverside,Perfluorooctanoic acid (PFOA),2022,22.394309615384614
+Riverside,Perfluorooctanoic acid (PFOA),2023,18.457694444444446
+Riverside,Perfluorooctanoic acid (PFOA),2024,8.75
+San Bernardino,Alkalinity as CaCO3,1985,1359
+San Bernardino,Alkalinity as CaCO3,1986,723.5
+San Bernardino,Alkalinity as CaCO3,1987,163.42857142857142
+San Bernardino,Alkalinity as CaCO3,1988,118
+San Bernardino,Alkalinity as CaCO3,1989,137
+San Bernardino,Alkalinity as CaCO3,1990,99.17647058823529
+San Bernardino,Alkalinity as CaCO3,2012,NA
+San Bernardino,Boron,1987,0.106
+San Bernardino,Boron,2012,NA
+San Bernardino,Chloride,1985,66.7
+San Bernardino,Chloride,1986,56.675
+San Bernardino,Chloride,1987,15.722222222222223
+San Bernardino,Chloride,1988,9.733333333333334
+San Bernardino,Chloride,1989,18.5375
+San Bernardino,Chloride,1990,64.65555555555555
+San Bernardino,Chloride,2012,NA
+San Bernardino,Perfluorooctane sulfonate (PFOS),2019,4.366272189349113
+San Bernardino,Perfluorooctane sulfonate (PFOS),2020,4.976337579617835
+San Bernardino,Perfluorooctane sulfonate (PFOS),2021,4.772471910112359
+San Bernardino,Perfluorooctane sulfonate (PFOS),2022,5.174561403508772
+San Bernardino,Perfluorooctane sulfonate (PFOS),2023,4.937053571428572
+San Bernardino,Perfluorooctane sulfonate (PFOS),2024,2
+San Bernardino,Perfluorooctanoic acid (PFOA),2019,4.1198224852071
+San Bernardino,Perfluorooctanoic acid (PFOA),2020,4.421974522292993
+San Bernardino,Perfluorooctanoic acid (PFOA),2021,3.459550561797753
+San Bernardino,Perfluorooctanoic acid (PFOA),2022,3.888220551378446
+San Bernardino,Perfluorooctanoic acid (PFOA),2023,5.6337053571428575
+San Bernardino,Perfluorooctanoic acid (PFOA),2024,2.6333333333333333
+San Diego,Alkalinity as CaCO3,1985,215.375
+San Diego,Alkalinity as CaCO3,1987,249.34375
+San Diego,Alkalinity as CaCO3,1988,118
+San Diego,Alkalinity as CaCO3,1989,186.68571428571428
+San Diego,Boron,1985,0.8375
+San Diego,Boron,1987,0.22666666666666668
+San Diego,Boron,1989,0.11212121212121212
+San Diego,Chloride,1985,1032.25
+San Diego,Chloride,1987,351.6842105263158
+San Diego,Chloride,1988,39
+San Diego,Chloride,1989,176
+San Diego,Perfluorooctane sulfonate (PFOS),2016,43.8
+San Diego,Perfluorooctane sulfonate (PFOS),2017,99.45614035087719
+San Diego,Perfluorooctane sulfonate (PFOS),2018,45.20779220779221
+San Diego,Perfluorooctane sulfonate (PFOS),2019,116.21123076923077
+San Diego,Perfluorooctane sulfonate (PFOS),2020,38.172
+San Diego,Perfluorooctane sulfonate (PFOS),2021,19.057051282051283
+San Diego,Perfluorooctane sulfonate (PFOS),2022,693.757688
+San Diego,Perfluorooctane sulfonate (PFOS),2023,20.547373626373627
+San Diego,Perfluorooctanoic acid (PFOA),2016,22.4
+San Diego,Perfluorooctanoic acid (PFOA),2017,21.70175438596491
+San Diego,Perfluorooctanoic acid (PFOA),2018,3.5844155844155843
+San Diego,Perfluorooctanoic acid (PFOA),2019,1669.505487179487
+San Diego,Perfluorooctanoic acid (PFOA),2020,12.364
+San Diego,Perfluorooctanoic acid (PFOA),2021,5.487820512820512
+San Diego,Perfluorooctanoic acid (PFOA),2022,2095.6588047808764
+San Diego,Perfluorooctanoic acid (PFOA),2023,6.20271978021978
+San Luis Obispo,Alkalinity as CaCO3,1985,210.29032258064515
+San Luis Obispo,Alkalinity as CaCO3,1986,256.6
+San Luis Obispo,Alkalinity as CaCO3,1987,171.2
+San Luis Obispo,Alkalinity as CaCO3,1989,234.375
+San Luis Obispo,Boron,1985,0.2935483870967742
+San Luis Obispo,Boron,1986,0.44
+San Luis Obispo,Boron,1987,0.16333333333333333
+San Luis Obispo,Chloride,1985,72.48387096774194
+San Luis Obispo,Chloride,1986,64.8
+San Luis Obispo,Chloride,1987,66.6
+San Luis Obispo,Chloride,1989,69.66666666666667
+San Luis Obispo,Perfluorooctane sulfonate (PFOS),2018,40
+San Luis Obispo,Perfluorooctane sulfonate (PFOS),2019,32.88026315789474
+San Luis Obispo,Perfluorooctane sulfonate (PFOS),2020,37.840222222222224
+San Luis Obispo,Perfluorooctane sulfonate (PFOS),2021,22.06122448979592
+San Luis Obispo,Perfluorooctane sulfonate (PFOS),2022,1306.8367605633803
+San Luis Obispo,Perfluorooctane sulfonate (PFOS),2023,13.809289617486339
+San Luis Obispo,Perfluorooctane sulfonate (PFOS),2024,1.95
+San Luis Obispo,Perfluorooctanoic acid (PFOA),2018,24
+San Luis Obispo,Perfluorooctanoic acid (PFOA),2019,12.260526315789473
+San Luis Obispo,Perfluorooctanoic acid (PFOA),2020,15.534444444444444
+San Luis Obispo,Perfluorooctanoic acid (PFOA),2021,8.788513513513514
+San Luis Obispo,Perfluorooctanoic acid (PFOA),2022,63.21176056338028
+San Luis Obispo,Perfluorooctanoic acid (PFOA),2023,6.748142076502733
+San Luis Obispo,Perfluorooctanoic acid (PFOA),2024,1.65
+Santa Barbara,Alkalinity as CaCO3,1985,271.48275862068965
+Santa Barbara,Alkalinity as CaCO3,1987,319.6
+Santa Barbara,Alkalinity as CaCO3,1988,121.33333333333333
+Santa Barbara,Alkalinity as CaCO3,1989,292
+Santa Barbara,Boron,1985,0.37586206896551727
+Santa Barbara,Boron,1988,0.23333333333333334
+Santa Barbara,Boron,1989,0.3
+Santa Barbara,Chloride,1985,130.29032258064515
+Santa Barbara,Chloride,1988,233
+Santa Barbara,Chloride,1989,87.8375
+Santa Barbara,Perfluorooctane sulfonate (PFOS),2019,5.628636363636364
+Santa Barbara,Perfluorooctane sulfonate (PFOS),2020,12555.134375
+Santa Barbara,Perfluorooctane sulfonate (PFOS),2021,663.681186440678
+Santa Barbara,Perfluorooctane sulfonate (PFOS),2022,209.90129032258065
+Santa Barbara,Perfluorooctane sulfonate (PFOS),2023,5.126
+Santa Barbara,Perfluorooctanoic acid (PFOA),2019,28.887727272727272
+Santa Barbara,Perfluorooctanoic acid (PFOA),2020,2596.09375
+Santa Barbara,Perfluorooctanoic acid (PFOA),2021,274.4415254237288
+Santa Barbara,Perfluorooctanoic acid (PFOA),2022,153.91451612903225
+Santa Barbara,Perfluorooctanoic acid (PFOA),2023,40.65266666666667
+Ventura,Alkalinity as CaCO3,1985,245.1958762886598
+Ventura,Alkalinity as CaCO3,1986,220.16666666666666
+Ventura,Alkalinity as CaCO3,1987,261.2068965517241
+Ventura,Alkalinity as CaCO3,1988,191.2289156626506
+Ventura,Alkalinity as CaCO3,1989,238.75409836065575
+Ventura,Alkalinity as CaCO3,1990,207.7027027027027
+Ventura,Alkalinity as CaCO3,1991,263.2
+Ventura,Boron,1985,0.5826530612244898
+Ventura,Boron,1986,0.7465116279069768
+Ventura,Boron,1987,0.7028358208955224
+Ventura,Boron,1988,0.5842105263157895
+Ventura,Boron,1989,1.6159322033898305
+Ventura,Boron,1990,0.5666666666666667
+Ventura,Chloride,1985,90.82828282828282
+Ventura,Chloride,1986,189.5
+Ventura,Chloride,1987,131.40579710144928
+Ventura,Chloride,1988,69.84705882352941
+Ventura,Chloride,1989,72.08064516129032
+Ventura,Chloride,1990,112.67567567567568
+Ventura,Chloride,1991,56.11764705882353
+Ventura,Perfluorooctane sulfonate (PFOS),2019,3.2055555555555557
+Ventura,Perfluorooctane sulfonate (PFOS),2020,2.765573770491803
+Ventura,Perfluorooctane sulfonate (PFOS),2021,2.074468085106383
+Ventura,Perfluorooctane sulfonate (PFOS),2022,1.9104301075268817
+Ventura,Perfluorooctane sulfonate (PFOS),2023,5.54074074074074
+Ventura,Perfluorooctanoic acid (PFOA),2019,4.038888888888889
+Ventura,Perfluorooctanoic acid (PFOA),2020,16.67704918032787
+Ventura,Perfluorooctanoic acid (PFOA),2021,1.8010638297872341
+Ventura,Perfluorooctanoic acid (PFOA),2022,2.9250537634408604
+Ventura,Perfluorooctanoic acid (PFOA),2023,2.993827160493827

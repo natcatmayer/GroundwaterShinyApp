@@ -11,6 +11,8 @@ library(shinydashboard)
 library(tsibble)
 library(feasts)
 library(fable)
+library(markdown)
+library(fabletools)
 
 ### Data
 
